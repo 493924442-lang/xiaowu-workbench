@@ -86,6 +86,31 @@
     border-radius: 18px; padding: 14px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.06); overflow-y: auto; position: relative;
   }
+
+  /* 全屏面板模式 */
+  .content.fullscreen-mode { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; margin: 0; border-radius: 0; height: 100%; }
+  .fullscreen-back {
+    display: none; position: fixed; top: 12px; left: 12px; z-index: 101;
+    background: rgba(255,126,179,0.9); color: #fff; border: none;
+    width: 36px; height: 36px; border-radius: 50%; font-size: 18px;
+    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    align-items: center; justify-content: center;
+  }
+  .fullscreen-mode .fullscreen-back { display: flex; }
+
+  /* 日历卡片 */
+  .calendar-card {
+    background: linear-gradient(135deg, #ff7eb3, #ffb3c8);
+    border-radius: 14px; padding: 12px 14px; margin-bottom: 12px;
+    color: #fff; display: flex; align-items: center; gap: 14px;
+  }
+  .calendar-left { text-align: center; }
+  .calendar-day { font-size: 32px; font-weight: 800; line-height: 1; }
+  .calendar-month { font-size: 12px; opacity: 0.9; margin-top: 2px; }
+  .calendar-right { flex: 1; }
+  .calendar-week { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .calendar-lunar { font-size: 12px; opacity: 0.85; line-height: 1.4; }
+
   .panel { display: none; }
   .panel.active { display: block; animation: panel-pop .35s cubic-bezier(.2,.8,.2,1); }
   @keyframes panel-pop {
@@ -203,17 +228,51 @@
   .note-item .del-btn { position: absolute; bottom: 6px; right: 8px; color: #ccc; cursor: pointer; font-size: 14px; }
 
   /* 英语练习 */
-  .en-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+  .en-tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
   .en-tab {
-    flex: 1; padding: 7px 0; text-align: center; background: #fff; border-radius: 10px;
+    flex: 1; min-width: 70px; padding: 7px 0; text-align: center; background: #fff; border-radius: 10px;
     font-size: 12px; color: #555; cursor: pointer; border: 1px solid #f0f0f0; font-weight: 500;
   }
   .en-tab.active { background: #ff7eb3; color: #fff; border-color: #ff7eb3; }
-  .en-card { background: #fff; border-radius: 12px; padding: 14px; border: 1px solid #f0f0f0; margin-bottom: 8px; }
+  .en-card { background: #fff; border-radius: 12px; padding: 14px; border: 1px solid #f0f0f0; margin-bottom: 8px; position: relative; }
   .en-word { font-size: 22px; font-weight: 700; color: #2b2b2b;}
   .en-phonetic { font-size: 12px; color: #888; margin: 4px 0;}
   .en-meaning { font-size: 13px; color: #3b82f6; margin-top: 6px;}
   .en-example { font-size: 12px; color: #666; margin-top: 6px; line-height: 1.5; font-style: italic;}
+
+  /* 英语打卡进度 */
+  .en-progress {
+    background: linear-gradient(135deg, #ff7eb3, #ffb3c8); color: #fff;
+    border-radius: 12px; padding: 12px; margin-bottom: 10px;
+  }
+  .en-progress-bar { background: rgba(255,255,255,0.3); border-radius: 8px; height: 8px; margin-top: 8px; overflow: hidden; }
+  .en-progress-fill { background: #fff; height: 100%; border-radius: 8px; transition: width .4s ease; }
+
+  /* 拼读练习 */
+  .spell-box { display: flex; gap: 4px; flex-wrap: wrap; margin: 8px 0; }
+  .spell-syllable {
+    background: #fff0f5; border: 1.5px solid #ffc0cb; border-radius: 8px;
+    padding: 6px 12px; font-size: 16px; font-weight: 600; color: #ff7eb3;
+    cursor: pointer; transition: all .2s;
+  }
+  .spell-syllable:active { background: #ff7eb3; color: #fff; transform: scale(1.1); }
+
+  /* 跟读按钮 */
+  .read-btn {
+    background: #ff7eb3; color: #fff; border: none; border-radius: 20px;
+    padding: 6px 14px; font-size: 12px; cursor: pointer;
+    box-shadow: 0 2px 6px rgba(255,126,179,0.3); margin-top: 6px;
+  }
+  .read-btn:active { transform: scale(0.95); }
+
+  /* 打卡标记 */
+  .check-mark {
+    width: 24px; height: 24px; border-radius: 50%; border: 2px solid #ffc0cb;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; color: #fff; transition: all .2s; flex-shrink: 0;
+  }
+  .check-mark.done { background: #ff7eb3; border-color: #ff7eb3; }
+  .en-section-title { font-size: 14px; font-weight: 700; margin: 14px 0 8px; color: #2b2b2b; display: flex; align-items: center; gap: 6px; }
 
   /* 底部输入栏已移除 */
 
@@ -232,7 +291,6 @@
   @keyframes daisy-sway {
     0%, 100% { transform: rotate(-12deg) scale(1); }
     50% { transform: rotate(12deg) scale(1.05); }
-  }
   }
   .app, .top-header, .main, .sidebar, .content { position: relative; z-index: 1; }
 
@@ -310,7 +368,19 @@
     </div>
 
     <!-- 右侧内容 -->
-    <div class="content">
+    <div class="content" id="contentBox">
+
+      <!-- 日历卡片（置顶） -->
+      <div class="calendar-card" id="calendarCard">
+        <div class="calendar-left">
+          <div class="calendar-day" id="calDay">--</div>
+          <div class="calendar-month" id="calMonth">--月</div>
+        </div>
+        <div class="calendar-right">
+          <div class="calendar-week" id="calWeek">星期-</div>
+          <div class="calendar-lunar" id="calLunar">农历加载中…</div>
+        </div>
+      </div>
 
       <!-- 1. 每日工作 -->
       <div class="panel active" id="panel-daily">
@@ -478,14 +548,42 @@
       <!-- 6. 英语 -->
       <div class="panel" id="panel-english">
         <div class="panel-header">
-          <div class="panel-title">🌍 英语练习 <span class="badge" id="enDay">Day 1</span></div>
-          <button class="sync-btn" onclick="addWord()">➕ 加词</button>
+          <div class="panel-title">🌍 英语每日练习 <span class="badge" id="enDay">Day 1</span></div>
+          <button class="sync-btn" onclick="enReset()">🔄 换一批</button>
         </div>
+
+        <!-- 打卡进度 -->
+        <div class="en-progress">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <b style="font-size:13px;">📊 今日打卡进度</b>
+            <span id="enProgressText" style="font-size:12px;">0/20</span>
+          </div>
+          <div class="en-progress-bar"><div class="en-progress-fill" id="enProgressFill" style="width:0%"></div></div>
+        </div>
+
         <div class="en-tabs">
-          <div class="en-tab active" data-entab="word">单词</div>
-          <div class="en-tab" data-entab="sentence">造句</div>
+          <div class="en-tab active" data-entab="spell" onclick="switchEnTab('spell')">拼读练习</div>
+          <div class="en-tab" data-entab="read" onclick="switchEnTab('read')">跟读练习</div>
+          <div class="en-tab" data-entab="checkin" onclick="switchEnTab('checkin')">打卡任务</div>
         </div>
-        <div id="enWordList"></div>
+
+        <!-- 拼读练习 -->
+        <div id="enTab-spell">
+          <div class="en-section-title">🔤 每日 10 词 · 拼读练习（点击音节拼读）</div>
+          <div id="spellList"></div>
+        </div>
+
+        <!-- 跟读练习 -->
+        <div id="enTab-read" style="display:none;">
+          <div class="en-section-title">🗣️ 每日 10 句 · 跟读练习（点击喇叭朗读）</div>
+          <div id="readList"></div>
+        </div>
+
+        <!-- 打卡任务 -->
+        <div id="enTab-checkin" style="display:none;">
+          <div class="en-section-title">✅ 打卡任务（完成一项打勾）</div>
+          <div id="checkinList"></div>
+        </div>
       </div>
 
     </div>
@@ -494,6 +592,9 @@
 
 <!-- 小雏菊背景装饰 -->
 <div class="daisy-bg" id="daisyBg"></div>
+
+<!-- 全屏返回按钮 -->
+<button class="fullscreen-back" id="fsBack" onclick="closeFullscreen()">‹</button>
 
 <script>
 // ============ 数据存储层 ============
@@ -527,11 +628,75 @@ function initData() {
     {id:1, content:'下周选题方向：\n① AI 工具 vs 普通人的故事\n② 一人公司真实日常\n③ 副业 0→1 复盘', time:getTimeStr()},
     {id:2, content:'金句：行动力，是这个时代最稀缺的才华。', time:getTimeStr()},
   ]);
-  if (!DB.get('words')) DB.set('words', [
-    {id:1, word:'grind', phonetic:'/ɡraɪnd/', meaning:'n.苦差事；v.磨，努力工作', example:'The daily grind never stops.'},
-    {id:2, word:'leverage', phonetic:'/ˈlevərɪdʒ/', meaning:'v.利用；n.杠杆作用', example:'Leverage AI to 10x your output.'},
-  ]);
+  if (!DB.get('words')) DB.set('words', []);
   if (!DB.get('enDay')) DB.set('enDay', 1);
+  if (!DB.get('enCheckin')) DB.set('enCheckin', {words:[], sentences:[], date:''});
+
+  // 每日词库（30词轮换）+ 每日句库（30句轮换）
+  const WORD_BANK = [
+    {w:'grind',p:'/ɡraɪnd/',s:['gr','ind'],m:'v.磨碎；努力工作',e:'The daily grind never stops.'},
+    {w:'leverage',p:'/ˈlevərɪdʒ/',s:['lev','er','age'],m:'v.利用；n.杠杆',e:'Leverage AI to 10x output.'},
+    {w:'mindset',p:'/ˈmaɪndset/',s:['mind','set'],m:'n.心态，思维模式',e:'A growth mindset changes everything.'},
+    {w:'create',p:'/kriˈeɪt/',s:['cre','ate'],m:'v.创造，创建',e:'Create your own opportunity.'},
+    {w:'focus',p:'/ˈfoʊkəs/',s:['fo','cus'],m:'n.专注；v.集中',e:'Focus on what matters most.'},
+    {w:'vision',p:'/ˈvɪʒn/',s:['vi','sion'],m:'n.视野，愿景',e:'Keep your vision clear.'},
+    {w:'action',p:'/ˈækʃn/',s:['ac','tion'],m:'n.行动，作为',e:'Action speaks louder than words.'},
+    {w:'growth',p:'/ɡroʊθ/',s:['grow','th'],m:'n.成长，增长',e:'Growth comes from discomfort.'},
+    {w:'habit',p:'/ˈhæbɪt/',s:['hab','it'],m:'n.习惯',e:'Good habits build great lives.'},
+    {w:'impact',p:'/ˈɪmpækt/',s:['im','pact'],m:'n.影响；v.冲击',e:'Make an impact, not just income.'},
+    {w:'pivot',p:'/ˈpɪvət/',s:['piv','ot'],m:'v.转向；n.支点',e:'Pivot fast when needed.'},
+    {w:'scale',p:'/skeɪl/',s:['scale'],m:'v.扩大规模；n.规模',e:'Scale your business smartly.'},
+    {w:'craft',p:'/kræft/',s:['craft'],m:'n.手艺；v.精心制作',e:'Craft your story well.'},
+    {w:'thrive',p:'/θraɪv/',s:['thrive'],m:'v.繁荣，茁壮成长',e:'Thrive under pressure.'},
+    {w:'boost',p:'/buːst/',s:['boost'],m:'v.提升，推动',e:'Boost your productivity.'},
+    {w:'fluent',p:'/ˈfluːənt/',s:['flu','ent'],m:'adj.流利的',e:'Be fluent in your field.'},
+    {w:'output',p:'/ˈaʊtpʊt/',s:['out','put'],m:'n.产出，输出',e:'Maximize your daily output.'},
+    {w:'niche',p:'/niːʃ/',s:['niche'],m:'n.细分领域',e:'Find your niche market.'},
+    {w:'trend',p:'/trend/',s:['trend'],m:'n.趋势，潮流',e:'Follow the trend wisely.'},
+    {w:'value',p:'/ˈvæljuː/',s:['val','ue'],m:'n.价值；v.重视',e:'Create value for others.'},
+    {w:'brand',p:'/brænd/',s:['brand'],m:'n.品牌',e:'Build your personal brand.'},
+    {w:'pitch',p:'/pɪtʃ/',s:['pitch'],m:'v.推介；n.提案',e:'Pitch your idea confidently.'},
+    {w:'learn',p:'/lɜːrn/',s:['learn'],m:'v.学习',e:'Learn something new daily.'},
+    {w:'adapt',p:'/əˈdæpt/',s:['a','dapt'],m:'v.适应，调整',e:'Adapt to changes quickly.'},
+    {w:'engage',p:'/ɪnˈɡeɪdʒ/',s:['en','gage'],m:'v.吸引，参与',e:'Engage with your audience.'},
+    {w:'launch',p:'/lɔːntʃ/',s:['launch'],m:'v.发布，推出',e:'Launch your project today.'},
+    {w:'refine',p:'/rɪˈfaɪn/',s:['re','fine'],m:'v.改进，完善',e:'Refine your skills daily.'},
+    {w:'spark',p:'/spɑːrk/',s:['spark'],m:'n.火花；v.激发',e:'Spark creativity every day.'},
+    {w:'pursue',p:'/pərˈsuː/',s:['pur','sue'],m:'v.追求，追逐',e:'Pursue your passion bravely.'},
+    {w:'elevate',p:'/ˈelɪveɪt/',s:['el','e','vate'],m:'v.提升，抬高',e:'Elevate your standards.'},
+  ];
+  const SENTENCE_BANK = [
+    'I believe in the power of consistency.',
+    'Small steps every day lead to big results.',
+    'Don\'t wait for opportunity, create it.',
+    'Your only limit is your mind.',
+    'Success is built on daily habits.',
+    'Focus on progress, not perfection.',
+    'Every expert was once a beginner.',
+    'Take action even when you don\'t feel ready.',
+    'Growth happens outside your comfort zone.',
+    'Your network is your net worth.',
+    'Learn from failure, not from criticism.',
+    'Discipline beats motivation every time.',
+    'Start before you\'re ready.',
+    'Be the energy you want to attract.',
+    'Consistency is the mother of mastery.',
+    'Don\'t compare your beginning to others\' middle.',
+    'The best time to start was yesterday.',
+    'Hard work beats talent when talent doesn\'t work hard.',
+    'Make today so productive that yesterday gets jealous.',
+    'Your future is created by what you do today.',
+    'Dream big, start small, act now.',
+    'The secret of getting ahead is getting started.',
+    'Quality is not an act, it is a habit.',
+    'Opportunities don\'t happen, you create them.',
+    'Stop wishing, start doing.',
+    'Push yourself, because no one else will do it for you.',
+    'Great things never come from comfort zones.',
+    'The harder you work, the luckier you get.',
+    'Believe you can, and you\'re halfway there.',
+    'Success is the sum of small efforts repeated daily.',
+  ];
 }
 initData();
 
@@ -769,40 +934,131 @@ function editNote(id, val) {
   n.content = val; n.time = getTimeStr(); DB.set('notes',notes); showSave();
 }
 
-// ============ 6. 英语 ============
-function renderWords() {
-  const words = DB.get('words', []);
-  const list = document.getElementById('enWordList');
+// ============ 6. 英语每日练习 ============
+function getTodayEnData() {
+  const day = DB.get('enDay', 1);
+  const wStart = (day - 1) * 10 % WORD_BANK.length;
+  const sStart = (day - 1) * 10 % SENTENCE_BANK.length;
+  const words = [];
+  for (let i = 0; i < 10; i++) words.push(WORD_BANK[(wStart + i) % WORD_BANK.length]);
+  const sentences = [];
+  for (let i = 0; i < 10; i++) sentences.push(SENTENCE_BANK[(sStart + i) % SENTENCE_BANK.length]);
+  return { words, sentences };
+}
+function getCheckin() {
+  const today = new Date().toISOString().slice(0, 10);
+  let c = DB.get('enCheckin', {words:[], sentences:[], date:''});
+  if (c.date !== today) { c = {words:[], sentences:[], date:today}; DB.set('enCheckin', c); }
+  return c;
+}
+function renderEnAll() {
+  renderSpell(); renderRead(); renderCheckin(); updateEnProgress();
+  document.getElementById('enDay').textContent = 'Day ' + DB.get('enDay', 1);
+}
+function renderSpell() {
+  const { words } = getTodayEnData();
+  const list = document.getElementById('spellList');
   list.innerHTML = '';
-  words.forEach(w => {
+  words.forEach((w, i) => {
     const el = document.createElement('div');
     el.className = 'en-card';
     el.innerHTML = `
-      <div class="en-word" contenteditable="true" onblur="editWord(${w.id},'word',this.textContent)">${esc(w.word)}</div>
-      <div class="en-phonetic" contenteditable="true" onblur="editWord(${w.id},'phonetic',this.textContent)">${esc(w.phonetic)}</div>
-      <div class="en-meaning" contenteditable="true" onblur="editWord(${w.id},'meaning',this.textContent)">${esc(w.meaning)}</div>
-      <div class="en-example" contenteditable="true" onblur="editWord(${w.id},'example',this.textContent)">${esc(w.example)}</div>
-      <span class="del-btn" style="float:right;cursor:pointer;color:#ccc;" onclick="delWord(${w.id})">✕</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:11px;color:#ccc;">${i+1}</span>
+        <div class="en-word">${esc(w.w)}</div>
+        <span class="en-phonetic">${esc(w.p)}</span>
+      </div>
+      <div class="spell-box">
+        ${w.s.map(s => `<span class="spell-syllable" onclick="speak('${esc(s)}')">${esc(s)}</span>`).join('')}
+      </div>
+      <div class="en-meaning">${esc(w.m)}</div>
+      <div class="en-example">${esc(w.e)}</div>
+      <button class="read-btn" onclick="speak('${esc(w.w)}')">🔊 朗读单词</button>
     `;
     list.appendChild(el);
   });
-  document.getElementById('enDay').textContent = 'Day ' + DB.get('enDay',1);
 }
-function addWord() {
-  const words = DB.get('words',[]);
-  words.push({id:nextId(words), word:'new word', phonetic:'/phonetic/', meaning:'释义', example:'Example sentence.'});
-  DB.set('words',words);
-  DB.set('enDay', DB.get('enDay',1)); // 不自动加天数
-  renderWords(); showSave();
+function renderRead() {
+  const { sentences } = getTodayEnData();
+  const list = document.getElementById('readList');
+  list.innerHTML = '';
+  sentences.forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'en-card';
+    el.innerHTML = `
+      <div style="display:flex;align-items:flex-start;gap:8px;">
+        <span style="font-size:11px;color:#ccc;margin-top:4px;">${i+1}</span>
+        <div style="flex:1;">
+          <div style="font-size:15px;line-height:1.6;">${esc(s)}</div>
+          <button class="read-btn" onclick="speak('${esc(s)}')">🔊 跟读</button>
+        </div>
+      </div>
+    `;
+    list.appendChild(el);
+  });
 }
-function delWord(id) {
-  DB.set('words', DB.get('words',[]).filter(w=>w.id!==id));
-  renderWords(); showSave();
+function renderCheckin() {
+  const c = getCheckin();
+  const { words, sentences } = getTodayEnData();
+  const list = document.getElementById('checkinList');
+  list.innerHTML = '<div style="font-size:12px;color:#999;margin-bottom:6px;">📖 单词打卡（10词）</div>';
+  words.forEach((w, i) => {
+    const done = c.words.includes(i);
+    const el = document.createElement('div');
+    el.className = 'task' + (done ? ' done' : '');
+    el.innerHTML = `
+      <div class="check-mark ${done?'done':''}" onclick="toggleCheckin('words',${i})">${done?'✓':''}</div>
+      <div class="task-text">${i+1}. ${esc(w.w)} <span style="color:#888;font-size:11px;">${esc(w.m)}</span></div>
+    `;
+    list.appendChild(el);
+  });
+  const sTitle = document.createElement('div');
+  sTitle.style.cssText = 'font-size:12px;color:#999;margin:10px 0 6px;';
+  sTitle.textContent = '🗣️ 句子打卡（10句）';
+  list.appendChild(sTitle);
+  sentences.forEach((s, i) => {
+    const done = c.sentences.includes(i);
+    const el = document.createElement('div');
+    el.className = 'task' + (done ? ' done' : '');
+    el.innerHTML = `
+      <div class="check-mark ${done?'done':''}" onclick="toggleCheckin('sentences',${i})">${done?'✓':''}</div>
+      <div class="task-text" style="font-size:12px;">${i+1}. ${esc(s)}</div>
+    `;
+    list.appendChild(el);
+  });
 }
-function editWord(id, field, val) {
-  const words = DB.get('words',[]);
-  const w = words.find(x=>x.id===id); if(!w) return;
-  w[field] = val; DB.set('words',words); showSave();
+function toggleCheckin(type, idx) {
+  const c = getCheckin();
+  const arr = c[type];
+  const i = arr.indexOf(idx);
+  if (i >= 0) arr.splice(i, 1); else arr.push(idx);
+  DB.set('enCheckin', c); renderCheckin(); updateEnProgress(); showSave();
+}
+function updateEnProgress() {
+  const c = getCheckin();
+  const total = c.words.length + c.sentences.length;
+  const pct = Math.round(total / 20 * 100);
+  document.getElementById('enProgressText').textContent = total + '/20';
+  document.getElementById('enProgressFill').style.width = pct + '%';
+}
+function switchEnTab(tab) {
+  document.querySelectorAll('.en-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.en-tab[data-entab="${tab}"]`)?.classList.add('active');
+  ['spell','read','checkin'].forEach(t => {
+    document.getElementById('enTab-' + t).style.display = t === tab ? 'block' : 'none';
+  });
+}
+function speak(text) {
+  if ('speechSynthesis' in window) {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US'; u.rate = 0.8;
+    speechSynthesis.speak(u);
+  }
+}
+function enReset() {
+  DB.set('enDay', DB.get('enDay', 1) + 1);
+  DB.set('enCheckin', {words:[], sentences:[], date:''});
+  renderEnAll(); showSave();
 }
 
 // ============ 导入导出 ============
@@ -845,16 +1101,104 @@ function esc(s) {
 function goTo(target) {
   document.querySelectorAll('.menu-item').forEach(i=>i.classList.remove('active'));
   document.querySelector(`.menu-item[data-target="${target}"]`)?.classList.add('active');
-  // 先隐藏所有面板
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   const panel = document.getElementById('panel-'+target);
   if (panel) {
-    // 强制重排，确保动画重新触发
     void panel.offsetWidth;
     panel.classList.add('active');
   }
+  // 全屏模式
+  openFullscreen();
 }
-function renderAll() { renderTasks(); renderIdeas(); renderRecords(); renderNotes(); renderWords(); renderHotNotes(); }
+function openFullscreen() {
+  document.getElementById('contentBox').classList.add('fullscreen-mode');
+}
+function closeFullscreen() {
+  document.getElementById('contentBox').classList.remove('fullscreen-mode');
+}
+
+// ============ 日历（阳历+农历） ============
+function renderCalendar() {
+  const d = new Date();
+  const days = ['日','一','二','三','四','五','六'];
+  document.getElementById('calDay').textContent = d.getDate();
+  document.getElementById('calMonth').textContent = (d.getMonth()+1) + '月';
+  document.getElementById('calWeek').textContent = '星期' + days[d.getDay()];
+  document.getElementById('calLunar').textContent = getLunarDate(d);
+}
+function getLunarDate(date) {
+  // 农历数据表（1900-2100年）
+  const lunarInfo = [
+    0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,
+    0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,
+    0x04970,0x0a4b0,0x0b4b5,0x06a50,0x06d40,0x1ab54,0x02b60,0x09570,0x052f2,0x04970,
+    0x06566,0x0d4a0,0x0ea50,0x06e95,0x05ad0,0x02b60,0x186e3,0x092e0,0x1c8d7,0x0c950,
+    0x0d4a0,0x1d8a6,0x0b550,0x056a0,0x1a5b4,0x025d0,0x092d0,0x0d2b2,0x0a950,0x0b557,
+    0x06ca0,0x0b550,0x15355,0x04da0,0x0a5b0,0x14573,0x052b0,0x0a9a8,0x0e950,0x06aa0,
+    0x0aea6,0x0ab50,0x04b60,0x0aae4,0x0a570,0x05260,0x0f263,0x0d950,0x05b57,0x056a0,
+    0x096d0,0x04dd5,0x04ad0,0x0a4d0,0x0d4d4,0x0d250,0x0d558,0x0b540,0x0b6a0,0x195a6,
+    0x095b0,0x049b0,0x0a974,0x0a4b0,0x0b27a,0x06a50,0x06d40,0x0af46,0x0ab60,0x09570,
+    0x04af5,0x04970,0x064b0,0x074a3,0x0ea50,0x06b58,0x055c0,0x0ab60,0x096d5,0x092e0,
+    0x0c960,0x0d954,0x0d4a0,0x0da50,0x07552,0x056a0,0x0abb7,0x025d0,0x092d0,0x0cab5,
+    0x0a950,0x0b4a0,0x0baa4,0x0ad50,0x055d9,0x04ba0,0x0a5b0,0x15176,0x052b0,0x0a930,
+    0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,
+    0x05aa0,0x076a3,0x096d0,0x04afb,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,
+    0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0,
+    0x14b63,0x09370,0x049f8,0x04970,0x064b0,0x168a6,0x0ea50,0x06b20,0x1a6c4,0x0aae0,
+    0x0a2e0,0x0d2e3,0x0c960,0x0d557,0x0d4a0,0x0da50,0x05d55,0x056a0,0x0a6d0,0x055d4,
+    0x052d0,0x0a9b8,0x0a950,0x0b4a0,0x0b6a6,0x0ad50,0x055a0,0x0aba4,0x0a5b0,0x052b0,
+    0x0b273,0x06930,0x07337,0x06aa0,0x0ad50,0x14b55,0x04b60,0x0a570,0x054e4,0x0d160,
+    0x0e968,0x0d520,0x0daa0,0x16aa6,0x056d0,0x04ae0,0x0a9d4,0x0a2d0,0x0d150,0x0f252,
+    0x0d520
+  ];
+  const lunarMonth = ['正','二','三','四','五','六','七','八','九','十','冬','腊'];
+  const lunarDay1 = ['初','十','廿','三十'];
+  const lunarDay2 = ['一','二','三','四','五','六','七','八','九','十'];
+
+  function lYearDays(y) {
+    let sum = 348;
+    for (let i = 0x8000; i > 0x8; i >>= 1) sum += (lunarInfo[y-1900] & i) ? 1 : 0;
+    return sum + leapDays(y);
+  }
+  function leapMonth(y) { return lunarInfo[y-1900] & 0xf; }
+  function leapDays(y) {
+    if (leapMonth(y)) return (lunarInfo[y-1900] & 0x10000) ? 30 : 29;
+    return 0;
+  }
+  function monthDays(y, m) { return (lunarInfo[y-1900] & (0x10000 >> m)) ? 30 : 29; }
+
+  let offset = (date - new Date(1900, 0, 31)) / 86400000;
+  offset = Math.floor(offset);
+  let i, temp = 0, year = 1900;
+  for (i = 1900; i < 2101 && offset > 0; i++) {
+    temp = lYearDays(i);
+    offset -= temp;
+    year++;
+  }
+  if (offset < 0) { offset += temp; year--; }
+  const leap = leapMonth(year);
+  let isLeap = false, month = 1;
+  for (i = 1; i < 13 && offset > 0; i++) {
+    if (leap > 0 && i === (leap + 1) && !isLeap) { --i; isLeap = true; temp = leapDays(year); }
+    else { temp = monthDays(year, i); }
+    if (isLeap && i === (leap + 1)) isLeap = false;
+    offset -= temp;
+    if (!isLeap) month++;
+  }
+  if (offset === 0 && leap > 0 && i === leap + 1) {
+    if (isLeap) { isLeap = false; } else { isLeap = true; --i; }
+  }
+  if (offset < 0) { offset += temp; --month; }
+  const day = offset + 1;
+  const mStr = (isLeap ? '闰' : '') + lunarMonth[month - 1] + '月';
+  let dStr;
+  if (day === 10) dStr = '初十';
+  else if (day === 20) dStr = '二十';
+  else if (day === 30) dStr = '三十';
+  else dStr = lunarDay1[Math.floor((day - 1) / 10)] + lunarDay2[(day - 1) % 10];
+  return '农历 ' + mStr + dStr;
+}
+function renderAll() { renderTasks(); renderIdeas(); renderRecords(); renderNotes(); renderEnAll(); renderHotNotes(); }
 
 // ============ 初始化 ============
 function tick() {
@@ -867,15 +1211,10 @@ tick(); setInterval(tick, 30000);
 document.querySelectorAll('.menu-item').forEach(it => {
   it.addEventListener('click', () => goTo(it.dataset.target));
 });
-document.querySelectorAll('.en-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.en-tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
-  });
-});
 
 // 首次渲染
 renderAll();
+renderCalendar();
 
 // ============ 小雏菊背景装饰 ============
 function createDaisies() {
