@@ -1,5 +1,5 @@
 // ===== 小吴工作台 Service Worker =====
-const CACHE_NAME = 'xiaowu-workbench-v3-editable';
+const CACHE_NAME = 'xiaowu-workbench-v4-app';
 const ASSETS = [
   './',
   './index.html',

@@ -30,231 +30,146 @@
     overflow: hidden;
   }
 
-  /* 顶部状态栏（模拟） */
+  /* 顶部状态栏 */
   .status-bar {
     height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #111;
-    background: rgba(255,255,255,0.0);
-    position: absolute; top: 0; left: 0; right: 0;
-    z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; font-size: 14px; font-weight: 600; color: #111;
+    position: absolute; top: 0; left: 0; right: 0; z-index: 10;
   }
   .status-bar .right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
   .status-bar .notch {
     position: absolute; left: 50%; transform: translateX(-50%);
-    top: 8px; width: 110px; height: 28px;
-    background: #111; border-radius: 20px;
+    top: 8px; width: 110px; height: 28px; background: #111; border-radius: 20px;
   }
 
   /* 顶部标题栏 */
   .top-header {
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 18px;
-    background: transparent;
-    margin-top: 44px;
-    position: relative;
-    z-index: 5;
+    height: 60px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 18px; margin-top: 44px; position: relative; z-index: 5;
   }
-  .top-header .title-wrap {
-    display: flex; align-items: center; gap: 10px;
-  }
+  .top-header .title-wrap { display: flex; align-items: center; gap: 10px; }
   .avatar {
     width: 38px; height: 38px; border-radius: 50%;
-    background: linear-gradient(135deg, #ffc0cb, #ff9ec0);
+    background: linear-gradient(135deg, #ffc0cb, #ff7eb3);
     color: #fff; display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 14px;
-    border: 2px solid #fff;
+    font-weight: 700; font-size: 14px; border: 2px solid #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
   }
   .user-name { font-size: 16px; font-weight: 700; color: #1f1f1f; }
   .user-sub { font-size: 11px; color: #8a8a8a; margin-top: 2px; }
-
   .search-box {
     flex: 1; margin-left: 14px; height: 36px;
     background: rgba(255,255,255,0.7); backdrop-filter: blur(6px);
-    border-radius: 18px;
-    display: flex; align-items: center; padding: 0 14px;
-    font-size: 13px; color: #b8b8b8;
-    border: 1px solid rgba(0,0,0,0.04);
+    border-radius: 18px; display: flex; align-items: center; padding: 0 14px;
+    font-size: 12px; color: #b8b8b8; border: 1px solid rgba(0,0,0,0.04);
   }
   .search-box span { flex: 1; }
 
   /* 主容器 */
   .app {
-    height: calc(100% - 44px);
-    margin-top: 44px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
+    height: calc(100% - 44px); margin-top: 44px;
+    display: flex; flex-direction: column; position: relative;
   }
-
-  /* 中间主体 */
-  .main {
-    flex: 1;
-    display: flex;
-    position: relative;
-    overflow: hidden;
-  }
+  .main { flex: 1; display: flex; position: relative; overflow: hidden; }
 
   /* 左侧栏 */
   .sidebar {
-    width: 168px;
-    background: rgba(255,255,255,0.96);
-    backdrop-filter: blur(10px);
-    border-radius: 18px;
-    margin: 8px 6px 8px 12px;
-    padding: 14px 10px;
+    width: 168px; background: rgba(255,255,255,0.96); backdrop-filter: blur(10px);
+    border-radius: 18px; margin: 8px 6px 8px 12px; padding: 14px 10px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    z-index: 4;
-    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 6px; z-index: 4; overflow-y: auto;
   }
-
   .menu-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 11px 12px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #2b2b2b;
-    font-weight: 500;
-    transition: all .2s ease;
-    position: relative;
+    display: flex; align-items: center; gap: 10px; padding: 11px 12px;
+    border-radius: 12px; cursor: pointer; font-size: 14px; color: #2b2b2b;
+    font-weight: 500; transition: all .2s ease;
   }
-  .menu-item .icon {
-    width: 22px; height: 22px; display: inline-flex;
-    align-items: center; justify-content: center; font-size: 18px;
-  }
+  .menu-item .icon { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; }
   .menu-item.active {
-    background: #ff7eb3;
-    color: #fff;
-    box-shadow: 0 4px 10px rgba(255,126,179,0.35);
+    background: #ff7eb3; color: #fff; box-shadow: 0 4px 10px rgba(255,126,179,0.35);
   }
   .menu-item:hover:not(.active) { background: rgba(255,126,179,0.12); }
 
   /* 右侧内容区 */
   .content {
-    flex: 1;
-    margin: 8px 12px 8px 6px;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(10px);
-    border-radius: 18px;
-    padding: 14px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    overflow-y: auto;
-    position: relative;
+    flex: 1; margin: 8px 12px 8px 6px;
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
+    border-radius: 18px; padding: 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06); overflow-y: auto; position: relative;
   }
-
   .panel { display: none; animation: fade .25s ease; }
   .panel.active { display: block; }
   @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none;} }
 
-  .panel-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 12px;
-  }
+  .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .panel-title { font-size: 16px; font-weight: 700; color: #2b2b2b; display: flex; align-items: center; gap: 8px;}
-  .panel-title .badge {
-    background: #ff7eb3; color: #fff; font-size: 10px;
-    padding: 2px 6px; border-radius: 6px; font-weight: 600;
-  }
+  .panel-title .badge { background: #ff7eb3; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: 600; }
   .sync-btn {
-    background: #ff7eb3; color: #fff; border: none;
-    padding: 7px 12px; border-radius: 14px; font-size: 12px;
-    display: flex; align-items: center; gap: 5px; cursor: pointer;
-    box-shadow: 0 2px 6px rgba(255,126,179,0.3);
+    background: #ff7eb3; color: #fff; border: none; padding: 7px 12px;
+    border-radius: 14px; font-size: 12px; display: flex; align-items: center; gap: 5px;
+    cursor: pointer; box-shadow: 0 2px 6px rgba(255,126,179,0.3);
   }
   .panel-tip { font-size: 12px; color: #8a8a8a; margin-bottom: 12px; }
 
   /* 任务列表 */
   .task-list { display: flex; flex-direction: column; gap: 8px; }
   .task {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 12px;
-    background: #fff;
-    border-radius: 12px;
-    border: 1px solid #f0f0f0;
-    font-size: 13px;
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; font-size: 13px;
   }
   .task .check {
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    border: 2px solid #d0d0d0;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    transition: all .2s;
+    width: 20px; height: 20px; border-radius: 50%; border: 2px solid #d0d0d0;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all .2s;
   }
   .task.done .check { background: #ff7eb3; border-color: #ff7eb3; color: #fff; }
   .task.done .task-text { text-decoration: line-through; color: #aaa; }
   .task .task-text { flex: 1; }
-  .task .task-tag {
-    font-size: 10px; padding: 2px 6px; border-radius: 6px;
-    background: #f1f1f1; color: #777;
-  }
+  .task .task-tag { font-size: 10px; padding: 2px 6px; border-radius: 6px; background: #f1f1f1; color: #777; }
   .task .task-tag.urgent { background: #fff0eb; color: #e85a3c; }
   .task .task-tag.normal { background: #eaf3ff; color: #3b82f6; }
+  .task .del-btn { color: #ccc; cursor: pointer; font-size: 16px; padding: 0 4px; }
+  .task .del-btn:active { color: #ee5a52; }
+
+  /* 添加任务输入 */
+  .add-row {
+    display: flex; gap: 6px; margin-top: 8px;
+  }
+  .add-row input {
+    flex: 1; height: 36px; border-radius: 10px; border: 1.5px solid #ffd0e0;
+    padding: 0 12px; font-size: 13px; outline: none; background: #fff;
+  }
+  .add-row input:focus { border-color: #ff7eb3; }
+  .add-row button {
+    background: #ff7eb3; color: #fff; border: none; border-radius: 10px;
+    padding: 0 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
 
   /* 进度环 */
   .progress-card {
-    background: linear-gradient(135deg, #ff7eb3, #ffb3c8);
-    color: #fff;
-    border-radius: 14px;
-    padding: 14px;
-    margin-bottom: 12px;
+    background: linear-gradient(135deg, #ff7eb3, #ffb3c8); color: #fff;
+    border-radius: 14px; padding: 14px; margin-bottom: 12px;
     display: flex; align-items: center; gap: 14px;
   }
-  .progress-ring {
-    position: relative;
-    width: 64px; height: 64px;
-  }
+  .progress-ring { position: relative; width: 64px; height: 64px; }
   .progress-ring svg { transform: rotate(-90deg); }
-  .progress-ring .num {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; font-weight: 700;
-  }
+  .progress-ring .num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; }
   .progress-info h4 { font-size: 14px; margin-bottom: 4px; }
   .progress-info p { font-size: 11px; opacity: .85; line-height: 1.4; }
 
   /* 灵感卡片 */
   .idea-card {
-    background: linear-gradient(135deg, #fffbe6, #fff5d6);
-    border-left: 3px solid #f5b500;
-    padding: 10px 12px; border-radius: 8px;
-    margin-bottom: 8px; font-size: 13px; color: #5a4500;
-    line-height: 1.5;
+    background: linear-gradient(135deg, #fffbe6, #fff5d6); border-left: 3px solid #f5b500;
+    padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px;
+    color: #5a4500; line-height: 1.5;
   }
   .idea-card .idea-title { font-weight: 700; margin-bottom: 4px; color: #b87600;}
-  .idea-card .tag {
-    display: inline-block; font-size: 10px;
-    background: rgba(245,181,0,0.15); color: #b87600;
-    padding: 1px 6px; border-radius: 4px; margin-right: 4px;
-  }
+  .idea-card .tag { display: inline-block; font-size: 10px; background: rgba(245,181,0,0.15); color: #b87600; padding: 1px 6px; border-radius: 4px; margin-right: 4px; }
 
   /* 热点视频 */
-  .hot-item {
-    display: flex; gap: 10px;
-    background: #fff; padding: 10px;
-    border-radius: 12px; border: 1px solid #f0f0f0;
-    margin-bottom: 8px;
-  }
-  .hot-thumb {
-    width: 70px; height: 70px; border-radius: 8px;
-    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-    color: #fff; display: flex; align-items: center; justify-content: center;
-    font-size: 24px; flex-shrink: 0;
-  }
+  .hot-item { display: flex; gap: 10px; background: #fff; padding: 10px; border-radius: 12px; border: 1px solid #f0f0f0; margin-bottom: 8px; }
+  .hot-thumb { width: 70px; height: 70px; border-radius: 8px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
   .hot-thumb.b2 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
   .hot-thumb.b3 { background: linear-gradient(135deg, #fa709a, #fee140); }
   .hot-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
@@ -263,17 +178,8 @@
   .hot-meta .hot { color: #ee5a52; font-weight: 600;}
 
   /* 记账 */
-  .account-summary {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  .acc-card {
-    background: #fff; border-radius: 12px;
-    padding: 10px; text-align: center;
-    border: 1px solid #f0f0f0;
-  }
+  .account-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .acc-card { background: #fff; border-radius: 12px; padding: 10px; text-align: center; border: 1px solid #f0f0f0; }
   .acc-card.income h4 { color: #ee5a52; font-size: 16px; }
   .acc-card.expense h4 { color: #3b82f6; font-size: 16px; }
   .acc-card.pending-out h4 { color: #f5b500; font-size: 16px; }
@@ -282,49 +188,34 @@
 
   .record-item {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 12px; background: #fff;
-    border-radius: 10px; border: 1px solid #f0f0f0;
+    padding: 10px 12px; background: #fff; border-radius: 10px; border: 1px solid #f0f0f0;
     margin-bottom: 6px; font-size: 13px;
   }
   .record-item .l { display: flex; align-items: center; gap: 8px;}
-  .record-item .cat-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-  }
+  .record-item .cat-dot { width: 8px; height: 8px; border-radius: 50%; }
   .record-item .amount { font-weight: 700; }
   .record-item .amount.in { color: #ee5a52; }
   .record-item .amount.out { color: #3b82f6; }
+  .record-item .del-btn { color: #ccc; cursor: pointer; font-size: 16px; padding-left: 8px; }
 
   /* 备忘录 */
   .note-item {
-    background: #fffbcc;
-    border-radius: 10px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    font-size: 13px;
-    line-height: 1.5;
-    position: relative;
+    background: #fffbcc; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px;
+    font-size: 13px; line-height: 1.5; position: relative;
     box-shadow: 1px 1px 0 rgba(0,0,0,0.04);
   }
   .note-item .note-time { font-size: 10px; color: #a08030; margin-top: 6px;}
   .note-item .pin { position: absolute; top: 6px; right: 8px; font-size: 11px; color: #c89400;}
+  .note-item .del-btn { position: absolute; bottom: 6px; right: 8px; color: #ccc; cursor: pointer; font-size: 14px; }
 
   /* 英语练习 */
-  .en-tabs {
-    display: flex; gap: 6px; margin-bottom: 10px;
-  }
+  .en-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
   .en-tab {
-    flex: 1; padding: 7px 0; text-align: center;
-    background: #fff; border-radius: 10px; font-size: 12px;
-    color: #555; cursor: pointer; border: 1px solid #f0f0f0;
-    font-weight: 500;
+    flex: 1; padding: 7px 0; text-align: center; background: #fff; border-radius: 10px;
+    font-size: 12px; color: #555; cursor: pointer; border: 1px solid #f0f0f0; font-weight: 500;
   }
   .en-tab.active { background: #ff7eb3; color: #fff; border-color: #ff7eb3; }
-
-  .en-card {
-    background: #fff; border-radius: 12px;
-    padding: 14px; border: 1px solid #f0f0f0;
-    margin-bottom: 8px;
-  }
+  .en-card { background: #fff; border-radius: 12px; padding: 14px; border: 1px solid #f0f0f0; margin-bottom: 8px; }
   .en-word { font-size: 22px; font-weight: 700; color: #2b2b2b;}
   .en-phonetic { font-size: 12px; color: #888; margin: 4px 0;}
   .en-meaning { font-size: 13px; color: #3b82f6; margin-top: 6px;}
@@ -332,233 +223,80 @@
 
   /* 底部输入栏 */
   .bottom-input {
-    height: 50px;
-    padding: 0 14px;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(8px);
+    height: 50px; padding: 0 14px;
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(8px);
     display: flex; align-items: center; gap: 10px;
     border-top: 1px solid rgba(0,0,0,0.05);
   }
   .bottom-input input {
-    flex: 1; height: 34px; border-radius: 17px;
-    border: none; background: #fff; padding: 0 14px;
-    font-size: 13px; outline: none;
-    box-shadow: inset 0 0 0 1px #eee;
+    flex: 1; height: 34px; border-radius: 17px; border: none; background: #fff;
+    padding: 0 14px; font-size: 13px; outline: none; box-shadow: inset 0 0 0 1px #eee;
   }
   .bottom-input .icon-btn {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    background: transparent; font-size: 18px; color: #555; cursor: pointer;
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; background: transparent; font-size: 18px; color: #555; cursor: pointer;
   }
 
-  /* 底部 Tab 切换：去掉，使用侧边栏即可 */
   .corner-action {
-    position: fixed;
-    right: 18px; bottom: 70px;
-    width: 46px; height: 46px; border-radius: 50%;
-    background: linear-gradient(135deg, #ee5a52, #ff7b6b);
-    color: #fff; font-size: 28px; font-weight: 300;
+    position: fixed; right: 18px; bottom: 70px; width: 46px; height: 46px; border-radius: 50%;
+    background: linear-gradient(135deg, #ee5a52, #ff7b6b); color: #fff; font-size: 28px; font-weight: 300;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 14px rgba(238,90,82,0.4);
-    cursor: pointer; z-index: 6;
+    box-shadow: 0 4px 14px rgba(238,90,82,0.4); cursor: pointer; z-index: 6;
   }
 
-  /* 滚动条美化 */
   ::-webkit-scrollbar { width: 4px; height: 4px;}
   ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px;}
 
-  /* 响应式 */
   @media (max-width: 380px) {
     .sidebar { width: 140px; }
     .menu-item { font-size: 13px; padding: 9px 10px;}
   }
 
-  /* ============ PWA 安装提示 & 离线提示 ============ */
+  /* PWA 安装提示 & 离线提示 */
   .pwa-toast {
-    position: fixed;
-    left: 16px; right: 16px;
-    bottom: 80px;
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.18);
-    padding: 14px 14px 12px;
-    z-index: 999;
-    transform: translateY(160%);
-    transition: transform .35s cubic-bezier(.2,.8,.2,1);
-    font-size: 13px;
+    position: fixed; left: 16px; right: 16px; bottom: 80px; background: #fff;
+    border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.18); padding: 14px 14px 12px;
+    z-index: 999; transform: translateY(160%); transition: transform .35s cubic-bezier(.2,.8,.2,1); font-size: 13px;
   }
   .pwa-toast.show { transform: translateY(0); }
-  .pwa-toast .toast-head {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
-  }
+  .pwa-toast .toast-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
   .pwa-toast .toast-head img { width: 32px; height: 32px; border-radius: 8px; }
   .pwa-toast .toast-title { font-size: 14px; font-weight: 700; color:#2b2b2b;}
   .pwa-toast .toast-sub { font-size: 11px; color:#8a8a8a; margin-top:1px;}
   .pwa-toast .toast-body { color: #555; line-height: 1.5; margin: 6px 0 10px;}
   .pwa-toast .toast-actions { display: flex; gap: 8px; justify-content: flex-end; }
-  .pwa-toast .btn {
-    border: none; cursor: pointer; font-size: 13px;
-    padding: 8px 16px; border-radius: 16px; font-weight: 600;
-  }
+  .pwa-toast .btn { border: none; cursor: pointer; font-size: 13px; padding: 8px 16px; border-radius: 16px; font-weight: 600; }
   .pwa-toast .btn-primary { background: #ff7eb3; color: #fff; }
   .pwa-toast .btn-ghost { background: #f1f1f1; color: #555; }
 
   .offline-banner {
-    position: fixed; left: 0; right: 0; top: 0;
-    background: #ee5a52; color: #fff;
-    font-size: 12px; text-align: center;
-    padding: 6px 0; z-index: 1000;
-    transform: translateY(-100%);
-    transition: transform .3s ease;
+    position: fixed; left: 0; right: 0; top: 0; background: #ee5a52; color: #fff;
+    font-size: 12px; text-align: center; padding: 6px 0; z-index: 1000;
+    transform: translateY(-100%); transition: transform .3s ease;
   }
   .offline-banner.show { transform: translateY(0); }
 
-  /* iOS safe area */
+  .save-tip {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: rgba(255,126,179,0.95); color: #fff; font-size: 12px; padding: 7px 16px;
+    border-radius: 20px; z-index: 998; transition: transform .3s ease; pointer-events: none;
+    box-shadow: 0 4px 12px rgba(255,126,179,0.4);
+  }
+  .save-tip.show { transform: translateX(-50%) translateY(0); }
+
   @supports (padding: max(0px)) {
     .bottom-input { padding-bottom: env(safe-area-inset-bottom); }
     .status-bar { padding-top: env(safe-area-inset-top); height: calc(44px + env(safe-area-inset-top)); }
     .app { margin-top: calc(44px + env(safe-area-inset-top)); height: calc(100% - 44px - env(safe-area-inset-top)); }
   }
-
-  /* ============ 可编辑输入区 ============ */
-  .editable {
-    background: #fff;
-    border: 1.5px dashed #ffc0cb;
-    border-radius: 10px;
-    padding: 8px 12px;
-    font-size: 13px;
-    color: #2b2b2b;
-    outline: none;
-    transition: border-color .2s, background .2s;
-    min-height: 36px;
-    line-height: 1.5;
-    word-break: break-word;
-    white-space: pre-wrap;
-  }
-  .editable:focus, .editable:active {
-    border-color: #ff7eb3;
-    border-style: solid;
-    background: #fffafc;
-    box-shadow: 0 0 0 3px rgba(255,126,179,0.12);
-  }
-  .editable:empty::before {
-    content: attr(data-placeholder);
-    color: #ccc;
-    font-size: 12px;
-  }
-
-  /* 可编辑任务文本 */
-  .task .task-text.editable {
-    border: none;
-    border-bottom: 1px dashed transparent;
-    border-radius: 4px;
-    padding: 2px 4px;
-    min-height: 0;
-    background: transparent;
-  }
-  .task .task-text.editable:focus {
-    border-bottom-color: #ff7eb3;
-    background: #fffafc;
-    box-shadow: none;
-  }
-
-  /* 可编辑记账输入 */
-  .acc-card .editable-num {
-    font-size: 16px;
-    font-weight: 700;
-    background: transparent;
-    border: none;
-    border-bottom: 1px dashed #ffc0cb;
-    border-radius: 0;
-    padding: 0;
-    min-height: 0;
-    width: 100%;
-    text-align: center;
-    outline: none;
-  }
-  .acc-card .editable-num:focus {
-    border-bottom-color: #ff7eb3;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .record-item .editable {
-    border: none;
-    border-bottom: 1px dashed transparent;
-    border-radius: 4px;
-    padding: 2px 6px;
-    min-height: 0;
-    background: transparent;
-    flex: 0 0 auto;
-    max-width: 60%;
-  }
-  .record-item .editable:focus {
-    border-bottom-color: #ff7eb3;
-    background: #fffafc;
-    box-shadow: none;
-  }
-  .record-item .amount.editable {
-    font-weight: 700;
-    text-align: right;
-  }
-
-  /* 灵感/备忘录可编辑 */
-  .idea-card .editable, .note-item .editable {
-    border: none;
-    background: transparent;
-    padding: 2px 0;
-    min-height: 0;
-  }
-  .idea-card .editable:focus, .note-item .editable:focus {
-    background: rgba(255,255,255,0.5);
-    border-radius: 4px;
-    box-shadow: none;
-  }
-
-  /* 英语输入区 */
-  .en-input-area {
-    background: #fff;
-    border: 1.5px dashed #ffc0cb;
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 8px;
-  }
-  .en-input-area .label {
-    font-size: 11px;
-    color: #999;
-    margin-bottom: 6px;
-  }
-  .en-input-area .editable {
-    border-color: #ffe0e8;
-    margin-bottom: 8px;
-  }
-  .en-input-area .editable:last-child { margin-bottom: 0; }
-
-  /* 保存提示 */
-  .save-tip {
-    position: fixed;
-    bottom: 90px; left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: rgba(255,126,179,0.95);
-    color: #fff;
-    font-size: 12px;
-    padding: 7px 16px;
-    border-radius: 20px;
-    z-index: 998;
-    transition: transform .3s ease;
-    pointer-events: none;
-    box-shadow: 0 4px 12px rgba(255,126,179,0.4);
-  }
-  .save-tip.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<!-- 离线提示横幅 -->
+<!-- 离线提示 -->
 <div class="offline-banner" id="offlineBanner">📡 当前离线，正在显示本地缓存内容</div>
 
-<!-- 模拟状态栏 -->
+<!-- 状态栏 -->
 <div class="status-bar">
   <div class="left" id="clock">09:57</div>
   <div class="notch"></div>
@@ -566,7 +304,6 @@
 </div>
 
 <div class="app">
-  <!-- 顶部 -->
   <div class="top-header">
     <div class="title-wrap">
       <div class="avatar">吴</div>
@@ -575,32 +312,18 @@
         <div class="user-sub">创作工作台</div>
       </div>
     </div>
-    <div class="search-box"><span>2026年7月21日 · 搜索…</span>🔍</div>
+    <div class="search-box"><span id="dateStr">加载中…</span>🔍</div>
   </div>
 
-  <!-- 主体 -->
   <div class="main">
-
     <!-- 左侧菜单 -->
     <div class="sidebar">
-      <div class="menu-item active" data-target="daily">
-        <span class="icon">📋</span><span>每日工作</span>
-      </div>
-      <div class="menu-item" data-target="inspire">
-        <span class="icon">💡</span><span>全体每日灵感</span>
-      </div>
-      <div class="menu-item" data-target="hotvideo">
-        <span class="icon">🔥</span><span>爆款热点视频2创</span>
-      </div>
-      <div class="menu-item" data-target="account">
-        <span class="icon">📊</span><span>每日记账</span>
-      </div>
-      <div class="menu-item" data-target="memo">
-        <span class="icon">📝</span><span>备忘录</span>
-      </div>
-      <div class="menu-item" data-target="english">
-        <span class="icon">🌍</span><span>英语练习</span>
-      </div>
+      <div class="menu-item active" data-target="daily"><span class="icon">📋</span><span>每日工作</span></div>
+      <div class="menu-item" data-target="inspire"><span class="icon">💡</span><span>全体每日灵感</span></div>
+      <div class="menu-item" data-target="hotvideo"><span class="icon">🔥</span><span>爆款热点视频2创</span></div>
+      <div class="menu-item" data-target="account"><span class="icon">📊</span><span>每日记账</span></div>
+      <div class="menu-item" data-target="memo"><span class="icon">📝</span><span>备忘录</span></div>
+      <div class="menu-item" data-target="english"><span class="icon">🌍</span><span>英语练习</span></div>
     </div>
 
     <!-- 右侧内容 -->
@@ -609,104 +332,50 @@
       <!-- 1. 每日工作 -->
       <div class="panel active" id="panel-daily">
         <div class="panel-header">
-          <div class="panel-title">📋 每日工作 <span class="badge">今日</span></div>
-          <button class="sync-btn">🔄 同步到手机</button>
+          <div class="panel-title">📋 每日工作 <span class="badge" id="todayBadge">今日</span></div>
+          <button class="sync-btn" onclick="exportData()">📤 导出</button>
         </div>
-        <div class="panel-tip">完成一项打勾，进度一目了然</div>
+        <div class="panel-tip">点击任务可编辑，打勾记录完成进度</div>
 
         <div class="progress-card">
           <div class="progress-ring">
             <svg width="64" height="64">
               <circle cx="32" cy="32" r="28" stroke="rgba(255,255,255,0.25)" stroke-width="6" fill="none"/>
               <circle cx="32" cy="32" r="28" stroke="#fff" stroke-width="6" fill="none"
-                stroke-dasharray="176" stroke-dashoffset="70" stroke-linecap="round"/>
+                stroke-dasharray="176" stroke-dashoffset="176" stroke-linecap="round" id="progressCircle"/>
             </svg>
-            <div class="num">60%</div>
+            <div class="num" id="progressNum">0%</div>
           </div>
           <div class="progress-info">
-            <h4>今日完成 3/5</h4>
-            <p>加油！还有 2 项任务等你搞定</p>
+            <h4 id="progressTitle">今日完成 0/0</h4>
+            <p id="progressDesc">添加你的第一个任务吧</p>
           </div>
         </div>
 
-        <div class="task-list">
-          <div class="task done">
-            <div class="check">✓</div>
-            <div class="task-text editable" contenteditable="true" data-key="task-1" data-placeholder="输入任务…">晨间选题会（30min）</div>
-            <span class="task-tag">已完成</span>
-          </div>
-          <div class="task done">
-            <div class="check">✓</div>
-            <div class="task-text editable" contenteditable="true" data-key="task-2" data-placeholder="输入任务…">短视频脚本撰写 ×2</div>
-            <span class="task-tag">已完成</span>
-          </div>
-          <div class="task done">
-            <div class="check">✓</div>
-            <div class="task-text editable" contenteditable="true" data-key="task-3" data-placeholder="输入任务…">回复评论区高赞留言</div>
-            <span class="task-tag">已完成</span>
-          </div>
-          <div class="task">
-            <div class="check"></div>
-            <div class="task-text editable" contenteditable="true" data-key="task-4" data-placeholder="输入任务…">剪辑爆款二创视频</div>
-            <span class="task-tag urgent">紧急</span>
-          </div>
-          <div class="task">
-            <div class="check"></div>
-            <div class="task-text editable" contenteditable="true" data-key="task-5" data-placeholder="输入任务…">整理今日记账数据</div>
-            <span class="task-tag normal">普通</span>
-          </div>
+        <div class="task-list" id="taskList"></div>
+        <div class="add-row">
+          <input type="text" id="newTaskInput" placeholder="输入新任务，回车添加…" onkeypress="if(event.key==='Enter')addTask()">
+          <button onclick="addTask()">➕ 添加</button>
         </div>
       </div>
 
-      <!-- 2. 全体每日灵感 -->
+      <!-- 2. 灵感 -->
       <div class="panel" id="panel-inspire">
         <div class="panel-header">
           <div class="panel-title">💡 全体每日灵感</div>
-          <button class="sync-btn">✨ 新灵感</button>
+          <button class="sync-btn" onclick="addIdea()">✨ 记灵感</button>
         </div>
-        <div class="panel-tip">AI + 团队共创 · 每日精选 5 条</div>
-
-        <div class="idea-card">
-          <div class="idea-title">#职场成长</div>
-          <div class="tag">AI工具</div>
-          <div class="tag">效率</div>
-          <p style="margin-top:6px;">"只会空想，但行动力为0？恭喜你，你的时代来了！" 用反差感切入AI工具主题，引导观众自嘲式共鸣。</p>
-        </div>
-        <div class="idea-card">
-          <div class="idea-title">#生活方式</div>
-          <div class="tag">生活</div>
-          <p style="margin-top:6px;">下班后 1 小时决定你的人生——3 个微习惯让你悄悄变强。</p>
-        </div>
-        <div class="idea-card">
-          <div class="idea-title">#情感共鸣</div>
-          <div class="tag">情感</div>
-          <p style="margin-top:6px;">成年人的崩溃都是从"我没事"开始的。给陌生人一个微笑，也许就能拯救今天。</p>
-        </div>
-        <div class="idea-card">
-          <div class="idea-title">#知识科普</div>
-          <div class="tag">科普</div>
-          <p style="margin-top:6px;">为什么飞机起飞前要滑行那么久？90% 的人都误解了。</p>
-        </div>
-        <div class="idea-card">
-          <div class="idea-title">#美食探店</div>
-          <div class="tag">探店</div>
-          <p style="margin-top:6px;">藏在巷子里的 15年老店，老板一句话让人破防……</p>
-        </div>
-
-        <div class="en-input-area" style="border-color:#ffe0a0;">
-          <div class="label">💡 我的灵感记录</div>
-          <div class="editable" contenteditable="true" data-key="my-idea" data-placeholder="闪现的灵感、选题、金句…随时记下来" style="min-height:60px;"></div>
-        </div>
+        <div class="panel-tip">AI + 团队共创 · 点击可编辑你的灵感</div>
+        <div id="ideaList"></div>
       </div>
 
-      <!-- 3. 爆款热点视频二创 -->
+      <!-- 3. 热点视频 -->
       <div class="panel" id="panel-hotvideo">
         <div class="panel-header">
-          <div class="panel-title">🔥 爆款热点视频 / 二创 <span class="badge">实时</span></div>
-          <button class="sync-btn">📥 收藏夹</button>
+          <div class="panel-title">🔥 爆款热点视频 / 二创 <span class="badge">参考</span></div>
+          <button class="sync-btn" onclick="addHot()">📥 收藏</button>
         </div>
-        <div class="panel-tip">全网热门 · 可一键二创跟拍</div>
-
+        <div class="panel-tip">全网热门参考 · 可记录你的二创笔记</div>
         <div class="hot-item">
           <div class="hot-thumb">🎬</div>
           <div class="hot-info">
@@ -735,73 +404,35 @@
             <div class="hot-meta"><span class="hot">🔥 9.8w 赞</span><span>1102 评论</span><span>5.1w 收藏</span></div>
           </div>
         </div>
+        <div id="hotNotes"></div>
       </div>
 
-      <!-- 4. 每日记账 -->
+      <!-- 4. 记账 -->
       <div class="panel" id="panel-account">
         <div class="panel-header">
-          <div class="panel-title">📊 每日记账 <span class="badge">7月21日</span></div>
-          <button class="sync-btn">➕ 记一笔</button>
+          <div class="panel-title">📊 每日记账 <span class="badge" id="accBadge">今日</span></div>
+          <button class="sync-btn" onclick="document.getElementById('newRecordInput').style.display='flex'">➕ 记一笔</button>
         </div>
 
         <div class="account-summary">
-          <div class="acc-card income">
-            <p>今日收入</p>
-            <h4 class="editable-num" contenteditable="true" data-key="acc-income" data-placeholder="0">+¥1,280</h4>
-          </div>
-          <div class="acc-card expense">
-            <p>今日支出</p>
-            <h4 class="editable-num" contenteditable="true" data-key="acc-expense" data-placeholder="0">-¥328</h4>
-          </div>
-          <div class="acc-card pending-out">
-            <p>未付款</p>
-            <h4 class="editable-num" contenteditable="true" data-key="acc-pending-out" data-placeholder="0">¥450</h4>
-          </div>
-          <div class="acc-card pending-in">
-            <p>未收款</p>
-            <h4 class="editable-num" contenteditable="true" data-key="acc-pending-in" data-placeholder="0">¥800</h4>
-          </div>
+          <div class="acc-card income"><p>今日收入</p><h4 id="sumIncome">¥0</h4></div>
+          <div class="acc-card expense"><p>今日支出</p><h4 id="sumExpense">¥0</h4></div>
+          <div class="acc-card pending-out"><p>未付款</p><h4 id="sumPendingOut">¥0</h4></div>
+          <div class="acc-card pending-in"><p>未收款</p><h4 id="sumPendingIn">¥0</h4></div>
         </div>
 
-        <div class="record-item">
-          <div class="l"><span class="cat-dot" style="background:#ee5a52"></span>广告合作收入</div>
-          <span class="amount in editable" contenteditable="true" data-key="rec-1" data-placeholder="0">+¥1,200</span>
-        </div>
-        <div class="record-item">
-          <div class="l"><span class="cat-dot" style="background:#3b82f6"></span>午餐 · 牛肉面</div>
-          <span class="amount out editable" contenteditable="true" data-key="rec-2" data-placeholder="0">-¥28</span>
-        </div>
-        <div class="record-item">
-          <div class="l"><span class="cat-dot" style="background:#f5b500"></span>打车报销</div>
-          <span class="amount in editable" contenteditable="true" data-key="rec-3" data-placeholder="0">+¥80</span>
-        </div>
-        <div class="record-item">
-          <div class="l"><span class="cat-dot" style="background:#ff7eb3"></span>咖啡</div>
-          <span class="amount out editable" contenteditable="true" data-key="rec-4" data-placeholder="0">-¥35</span>
-        </div>
-        <div class="record-item">
-          <div class="l"><span class="cat-dot" style="background:#a855f7"></span>剪辑软件订阅</div>
-          <span class="amount out editable" contenteditable="true" data-key="rec-5" data-placeholder="0">-¥99</span>
-        </div>
-        <div class="record-item">
-          <div class="l"><span class="cat-dot" style="background:#ff6b6b"></span>晚餐 · 轻食</div>
-          <span class="amount out editable" contenteditable="true" data-key="rec-6" data-placeholder="0">-¥48</span>
-        </div>
-        <div class="record-item">
-          <div class="l"><span class="cat-dot" style="background:#10b981"></span>直播间打赏</div>
-          <span class="amount out editable" contenteditable="true" data-key="rec-7" data-placeholder="0">-¥118</span>
-        </div>
-        <div class="record-item">
-          <div class="l"><span class="cat-dot" style="background:#f5b500"></span>待付 · 场地租赁费</div>
-          <span class="amount out editable" contenteditable="true" data-key="rec-8" data-placeholder="0" style="color:#f5b500;">待付 ¥300</span>
-        </div>
-        <div class="record-item">
-          <div class="l"><span class="cat-dot" style="background:#f5b500"></span>待付 · 合作分成</div>
-          <span class="amount out editable" contenteditable="true" data-key="rec-9" data-placeholder="0" style="color:#f5b500;">待付 ¥150</span>
-        </div>
-        <div class="record-item">
-          <div class="l"><span class="cat-dot" style="background:#a855f7"></span>待收 · 品牌方尾款</div>
-          <span class="amount in editable" contenteditable="true" data-key="rec-10" data-placeholder="0" style="color:#a855f7;">待收 ¥800</span>
+        <div id="recordList"></div>
+
+        <div class="add-row" id="newRecordInput" style="display:none;">
+          <input type="text" id="recDesc" placeholder="描述（如：午餐）" style="flex:1.5;">
+          <input type="number" id="recAmount" placeholder="金额" style="flex:1; min-width:0;">
+          <select id="recType" style="height:36px;border-radius:10px;border:1.5px solid #ffd0e0;font-size:12px;padding:0 4px;">
+            <option value="in">收入</option>
+            <option value="out">支出</option>
+            <option value="pending-out">未付</option>
+            <option value="pending-in">未收</option>
+          </select>
+          <button onclick="addRecord()">✓</button>
         </div>
       </div>
 
@@ -809,322 +440,492 @@
       <div class="panel" id="panel-memo">
         <div class="panel-header">
           <div class="panel-title">📝 备忘录</div>
-          <button class="sync-btn">✏️ 新建</button>
+          <button class="sync-btn" onclick="addNote()">✏️ 新建</button>
         </div>
-        <div class="panel-tip">想法瞬记 · 自动同步到云端</div>
-
-        <div class="note-item">
-          <div class="pin">📌</div>
-          <div class="editable" contenteditable="true" data-key="note-1" data-placeholder="写点什么…"><b>下周选题方向：</b><br>① AI 工具 vs 普通人的故事<br>② 一人公司真实日常<br>③ 副业 0 → 1 复盘</div>
-          <div class="note-time">2026-07-21 09:12</div>
-        </div>
-        <div class="note-item">
-          <div class="editable" contenteditable="true" data-key="note-2" data-placeholder="写点什么…"><b>金句收集：</b><br>"行动力，是这个时代最稀缺的才华。"</div>
-          <div class="note-time">2026-07-20 22:48</div>
-        </div>
-        <div class="note-item">
-          <div class="editable" contenteditable="true" data-key="note-3" data-placeholder="写点什么…"><b>待办（重要）：</b><br>• 联系老张谈合作分成<br>• 把爆款二创视频发B站<br>• 给妈妈打电话</div>
-          <div class="note-time">2026-07-20 18:30</div>
-        </div>
-        <div class="note-item">
-          <div class="editable" contenteditable="true" data-key="note-4" data-placeholder="写点什么…"><b>灵感碎片：</b><br>凌晨3点的便利店，最能看清一座城市的底色……</div>
-          <div class="note-time">2026-07-19 03:14</div>
-        </div>
+        <div class="panel-tip">想法瞬记 · 点击可编辑 · 自动保存到本地</div>
+        <div id="noteList"></div>
       </div>
 
-      <!-- 6. 英语练习 -->
+      <!-- 6. 英语 -->
       <div class="panel" id="panel-english">
         <div class="panel-header">
-          <div class="panel-title">🌍 英语练习 <span class="badge">Day 12</span></div>
-          <button class="sync-btn">🎙️ 跟读</button>
+          <div class="panel-title">🌍 英语练习 <span class="badge" id="enDay">Day 1</span></div>
+          <button class="sync-btn" onclick="addWord()">➕ 加词</button>
         </div>
-
         <div class="en-tabs">
-          <div class="en-tab active">单词</div>
-          <div class="en-tab">听力</div>
-          <div class="en-tab">口语</div>
-          <div class="en-tab">写作</div>
+          <div class="en-tab active" data-entab="word">单词</div>
+          <div class="en-tab" data-entab="sentence">造句</div>
         </div>
-
-        <div class="en-card">
-          <div class="en-word">grind <span style="font-size:14px;color:#888;">v.</span></div>
-          <div class="en-phonetic">/ɡraɪnd/</div>
-          <div class="en-meaning">n. 苦差事；v. 磨，碾；努力工作</div>
-          <div class="en-example">"The daily grind never stops."<br>每日枯燥的工作不会停止。</div>
-        </div>
-        <div class="en-card">
-          <div class="en-word">leverage <span style="font-size:14px;color:#888;">v.</span></div>
-          <div class="en-phonetic">/ˈlevərɪdʒ/</div>
-          <div class="en-meaning">v. 利用；n. 影响力，杠杆作用</div>
-          <div class="en-example">"Leverage AI to 10x your output."<br>利用AI让你的产出放大10倍。</div>
-        </div>
-        <div class="en-card">
-          <div class="en-word">mindset <span style="font-size:14px;color:#888;">n.</span></div>
-          <div class="en-phonetic">/ˈmaɪndset/</div>
-          <div class="en-meaning">n. 思维模式，心态</div>
-          <div class="en-example">"A growth mindset changes everything."<br>成长型思维改变一切。</div>
-        </div>
-
-        <div class="en-input-area">
-          <div class="label">✍️ 我的练习（输入单词或造句）</div>
-          <div class="editable" contenteditable="true" data-key="en-word" data-placeholder="输入今天学到的单词…"></div>
-          <div class="editable" contenteditable="true" data-key="en-sentence" data-placeholder="用这个单词造个句子…"></div>
-        </div>
+        <div id="enWordList"></div>
       </div>
 
     </div>
   </div>
 
-  <!-- 底部输入 -->
   <div class="bottom-input">
-    <input type="text" placeholder="发条评论，和大家一起讨论">
-    <div class="icon-btn">🖼️</div>
-    <div class="icon-btn">@</div>
-    <div class="icon-btn">😊</div>
+    <input type="text" placeholder="在备忘录快速记一笔…" id="quickInput" onkeypress="if(event.key==='Enter')quickAdd()">
+    <div class="icon-btn" onclick="quickAdd()">➕</div>
+    <div class="icon-btn" onclick="exportData()">📤</div>
+    <div class="icon-btn" onclick="importData()">📥</div>
   </div>
 </div>
 
-<div class="corner-action" title="新增">+</div>
+<div class="corner-action" onclick="goTo('memo')">+</div>
 
 <script>
-  // 实时时钟
-  function tick() {
-    const d = new Date();
-    const hh = String(d.getHours()).padStart(2, '0');
-    const mm = String(d.getMinutes()).padStart(2, '0');
-    document.getElementById('clock').textContent = hh + ':' + mm;
-  }
-  tick(); setInterval(tick, 30000);
+// ============ 数据存储层 ============
+const DB = {
+  get(key, def) {
+    try { const v = localStorage.getItem('xw_wb_' + key); return v ? JSON.parse(v) : def; }
+    catch(e) { return def; }
+  },
+  set(key, val) { localStorage.setItem('xw_wb_' + key, JSON.stringify(val)); }
+};
 
-  // 切换左侧菜单
-  const items = document.querySelectorAll('.menu-item');
-  const panels = document.querySelectorAll('.panel');
-  items.forEach(it => {
-    it.addEventListener('click', () => {
-      items.forEach(i => i.classList.remove('active'));
-      it.classList.add('active');
-      const target = it.dataset.target;
-      panels.forEach(p => p.classList.remove('active'));
-      const el = document.getElementById('panel-' + target);
-      if (el) el.classList.add('active');
-    });
+// 初始化默认数据
+function initData() {
+  if (!DB.get('tasks')) DB.set('tasks', [
+    {id:1, text:'晨间选题会（30min）', done:true, tag:''},
+    {id:2, text:'短视频脚本撰写 ×2', done:true, tag:''},
+    {id:3, text:'回复评论区高赞留言', done:false, tag:'urgent'},
+    {id:4, text:'剪辑爆款二创视频', done:false, tag:'normal'},
+  ]);
+  if (!DB.get('ideas')) DB.set('ideas', [
+    {id:1, title:'#职场成长', tags:['AI工具','效率'], content:'"只会空想，但行动力为0？恭喜你，你的时代来了！" 用反差感切入AI工具主题。'},
+    {id:2, title:'#生活方式', tags:['生活'], content:'下班后 1 小时决定你的人生——3 个微习惯让你悄悄变强。'},
+    {id:3, title:'#情感共鸣', tags:['情感'], content:'成年人的崩溃都是从"我没事"开始的。给陌生人一个微笑，也许就能拯救今天。'},
+  ]);
+  if (!DB.get('records')) DB.set('records', [
+    {id:1, desc:'广告合作收入', amount:1200, type:'in'},
+    {id:2, desc:'午餐 · 牛肉面', amount:28, type:'out'},
+    {id:3, desc:'待付 · 场地租赁费', amount:300, type:'pending-out'},
+    {id:4, desc:'待收 · 品牌方尾款', amount:800, type:'pending-in'},
+  ]);
+  if (!DB.get('notes')) DB.set('notes', [
+    {id:1, content:'下周选题方向：\n① AI 工具 vs 普通人的故事\n② 一人公司真实日常\n③ 副业 0→1 复盘', time:getTimeStr()},
+    {id:2, content:'金句：行动力，是这个时代最稀缺的才华。', time:getTimeStr()},
+  ]);
+  if (!DB.get('words')) DB.set('words', [
+    {id:1, word:'grind', phonetic:'/ɡraɪnd/', meaning:'n.苦差事；v.磨，努力工作', example:'The daily grind never stops.'},
+    {id:2, word:'leverage', phonetic:'/ˈlevərɪdʒ/', meaning:'v.利用；n.杠杆作用', example:'Leverage AI to 10x your output.'},
+  ]);
+  if (!DB.get('enDay')) DB.set('enDay', 1);
+}
+initData();
+
+function getTimeStr() {
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
+function nextId(arr) { return arr.length ? Math.max(...arr.map(x=>x.id))+1 : 1; }
+
+// ============ 保存提示 ============
+let saveTimer = null;
+function showSave() {
+  let t = document.getElementById('saveTip');
+  if (!t) { t = document.createElement('div'); t.className='save-tip'; t.id='saveTip'; t.textContent='✓ 已保存'; document.body.appendChild(t); }
+  t.classList.add('show'); clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>t.classList.remove('show'), 1200);
+}
+
+// ============ 1. 每日工作 ============
+function renderTasks() {
+  const tasks = DB.get('tasks', []);
+  const list = document.getElementById('taskList');
+  list.innerHTML = '';
+  tasks.forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'task' + (t.done ? ' done' : '');
+    el.innerHTML = `
+      <div class="check" onclick="toggleTask(${t.id})">${t.done?'✓':''}</div>
+      <div class="task-text" contenteditable="true" data-id="${t.id}" onblur="editTask(${t.id},this.textContent)">${esc(t.text)}</div>
+      ${t.tag ? `<span class="task-tag ${t.tag}">${t.tag==='urgent'?'紧急':'普通'}</span>` : ''}
+      <span class="del-btn" onclick="delTask(${t.id})">✕</span>
+    `;
+    list.appendChild(el);
   });
+  updateProgress();
+}
+function toggleTask(id) {
+  const tasks = DB.get('tasks',[]);
+  const t = tasks.find(x=>x.id===id); if(!t) return;
+  t.done = !t.done; DB.set('tasks',tasks); renderTasks(); showSave();
+}
+function addTask() {
+  const input = document.getElementById('newTaskInput');
+  const text = input.value.trim(); if(!text) return;
+  const tasks = DB.get('tasks',[]);
+  tasks.push({id:nextId(tasks), text, done:false, tag:''});
+  DB.set('tasks',tasks); input.value=''; renderTasks(); showSave();
+}
+function delTask(id) {
+  let tasks = DB.get('tasks',[]);
+  tasks = tasks.filter(t=>t.id!==id);
+  DB.set('tasks',tasks); renderTasks(); showSave();
+}
+function editTask(id, text) {
+  const tasks = DB.get('tasks',[]);
+  const t = tasks.find(x=>x.id===id); if(!t) return;
+  t.text = text; DB.set('tasks',tasks); showSave();
+}
+function updateProgress() {
+  const tasks = DB.get('tasks',[]);
+  const done = tasks.filter(t=>t.done).length;
+  const total = tasks.length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('progressNum').textContent = pct+'%';
+  document.getElementById('progressTitle').textContent = `今日完成 ${done}/${total}`;
+  document.getElementById('progressDesc').textContent =
+    total===0 ? '添加你的第一个任务吧' :
+    done===total ? '完美收工！今天你太棒了 🎉' :
+    `加油！还有 ${total-done} 项任务等你搞定`;
+  const ring = document.getElementById('progressCircle');
+  ring.setAttribute('stroke-dashoffset', 176 - 176*pct/100);
+}
 
-  // 任务打勾
-  document.querySelectorAll('.task').forEach(t => {
-    t.querySelector('.check').addEventListener('click', e => {
-      e.stopPropagation();
-      t.classList.toggle('done');
-      const c = t.querySelector('.check');
-      c.textContent = t.classList.contains('done') ? '✓' : '';
-      updateProgress();
-    });
-  });
-
-  function updateProgress() {
-    const tasks = document.querySelectorAll('#panel-daily .task');
-    const done = document.querySelectorAll('#panel-daily .task.done');
-    const pct = Math.round(done.length / tasks.length * 100);
-    document.querySelector('.progress-ring .num').textContent = pct + '%';
-    document.querySelector('.progress-info h4').textContent = `今日完成 ${done.length}/${tasks.length}`;
-    const remain = tasks.length - done.length;
-    document.querySelector('.progress-info p').textContent =
-      remain === 0 ? '完美收工！今天你太棒了 🎉' : `加油！还有 ${remain} 项任务等你搞定`;
-    const ring = document.querySelector('.progress-ring svg circle:nth-child(2)');
-    const total = 176;
-    ring.setAttribute('stroke-dashoffset', total - total * pct / 100);
-  }
-
-  // 英语 tab 切换
-  document.querySelectorAll('.en-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.en-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-    });
-  });
-
-  // 同步按钮假反馈
-  document.querySelectorAll('.sync-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const orig = btn.innerHTML;
-      btn.innerHTML = '✓ 已同步';
-      setTimeout(() => btn.innerHTML = orig, 1200);
-    });
-  });
-
-  // ============ 可编辑内容本地存储 ============
-  const STORAGE_PREFIX = 'xw_wb_';
-
-  // 恢复所有可编辑区域的内容
-  function restoreEditable() {
-    document.querySelectorAll('.editable[contenteditable="true"]').forEach(el => {
-      const key = el.dataset.key;
-      if (!key) return;
-      const saved = localStorage.getItem(STORAGE_PREFIX + key);
-      if (saved !== null && saved !== '') {
-        el.innerHTML = saved;
-      }
-    });
-  }
-
-  // 保存提示元素
-  let saveTimer = null;
-  function showSaveTip() {
-    let tip = document.getElementById('saveTip');
-    if (!tip) {
-      tip = document.createElement('div');
-      tip.className = 'save-tip';
-      tip.id = 'saveTip';
-      tip.textContent = '✓ 已保存';
-      document.body.appendChild(tip);
-    }
-    tip.classList.add('show');
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => tip.classList.remove('show'), 1200);
-  }
-
-  // 监听所有可编辑区域的输入事件
-  document.querySelectorAll('.editable[contenteditable="true"]').forEach(el => {
-    el.addEventListener('input', () => {
-      const key = el.dataset.key;
-      if (!key) return;
-      localStorage.setItem(STORAGE_PREFIX + key, el.innerHTML);
-      showSaveTip();
-    });
-    // 阻止粘贴富文本（只粘贴纯文本）
-    el.addEventListener('paste', e => {
-      e.preventDefault();
-      const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-      document.execCommand('insertText', false, text);
-    });
-  });
-
-  // 页面加载时恢复
-  restoreEditable();
-  // 离线/在线 监听
-  function updateOnline() {
-    const banner = document.getElementById('offlineBanner');
-    if (!navigator.onLine) banner.classList.add('show');
-    else banner.classList.remove('show');
-  }
-  window.addEventListener('online', updateOnline);
-  window.addEventListener('offline', updateOnline);
-  updateOnline();
-
-  // 通过 URL hash 跳转到指定模块（支持桌面快捷方式 shortcuts）
-  function applyHash() {
-    const h = (location.hash || '').replace('#','');
-    if (!h) return;
-    const map = { daily:'daily', inspire:'inspire', hotvideo:'hotvideo',
-                  account:'account', memo:'memo', english:'english' };
-    if (map[h]) {
-      const item = document.querySelector(`.menu-item[data-target="${map[h]}"]`);
-      if (item) item.click();
-    }
-  }
-  applyHash();
-  window.addEventListener('hashchange', applyHash);
-
-  // 安装提示弹窗（iOS 引导式 / 标准 beforeinstallprompt）
-  let deferredPrompt = null;
-
-  function showInstallToast(content) {
-    let toast = document.getElementById('pwaToast');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.className = 'pwa-toast';
-      toast.id = 'pwaToast';
-      document.body.appendChild(toast);
-    }
-    toast.innerHTML = content;
-    requestAnimationFrame(() => toast.classList.add('show'));
-  }
-  function hideInstallToast() {
-    const toast = document.getElementById('pwaToast');
-    if (toast) toast.classList.remove('show');
-  }
-
-  // 检测是否已安装（standalone）
-  const isStandalone =
-    window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone === true ||
-    document.referrer.startsWith('android-app://');
-
-  // 标准浏览器（Chrome/Edge/Android）：捕获 beforeinstallprompt
-  window.addEventListener('beforeinstallprompt', e => {
-    e.preventDefault();
-    deferredPrompt = e;
-    if (isStandalone) return;
-    showInstallToast(`
-      <div class="toast-head">
-        <img src="icons/icon-192.png" alt="">
-        <div>
-          <div class="toast-title">把工作台装到桌面</div>
-          <div class="toast-sub">像 App 一样全屏使用 · 支持离线</div>
-        </div>
+// ============ 2. 灵感 ============
+function renderIdeas() {
+  const ideas = DB.get('ideas', []);
+  const list = document.getElementById('ideaList');
+  list.innerHTML = '';
+  ideas.forEach(i => {
+    const el = document.createElement('div');
+    el.className = 'idea-card';
+    el.innerHTML = `
+      <div class="idea-title" contenteditable="true" onblur="editIdea(${i.id},'title',this.textContent)">${esc(i.title)}</div>
+      <div style="margin:4px 0;">
+        ${i.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}
       </div>
-      <div class="toast-body">点击「立即安装」，会在桌面生成一个独立图标，下次直接全屏打开，无需浏览器。</div>
-      <div class="toast-actions">
-        <button class="btn btn-ghost" id="pwaClose">稍后</button>
-        <button class="btn btn-primary" id="pwaInstall">立即安装</button>
+      <div contenteditable="true" onblur="editIdea(${i.id},'content',this.textContent)" style="margin-top:6px;white-space:pre-wrap;">${esc(i.content)}</div>
+      <span class="del-btn" style="float:right;cursor:pointer;color:#ccc;font-size:14px;" onclick="delIdea(${i.id})">✕</span>
+    `;
+    list.appendChild(el);
+  });
+}
+function addIdea() {
+  const ideas = DB.get('ideas',[]);
+  ideas.push({id:nextId(ideas), title:'#新灵感', tags:['待分类'], content:'点击编辑你的灵感内容…'});
+  DB.set('ideas',ideas); renderIdeas(); showSave();
+}
+function delIdea(id) {
+  let ideas = DB.get('ideas',[]).filter(i=>i.id!==id);
+  DB.set('ideas',ideas); renderIdeas(); showSave();
+}
+function editIdea(id, field, val) {
+  const ideas = DB.get('ideas',[]);
+  const i = ideas.find(x=>x.id===id); if(!i) return;
+  i[field] = val; DB.set('ideas',ideas); showSave();
+}
+
+// ============ 3. 热点笔记 ============
+function renderHotNotes() {
+  const notes = DB.get('hotNotes', []);
+  const el = document.getElementById('hotNotes');
+  el.innerHTML = '<div style="font-size:12px;color:#999;margin:10px 0 6px;">📌 我的二创笔记</div>';
+  notes.forEach(n => {
+    const d = document.createElement('div');
+    d.className = 'note-item';
+    d.innerHTML = `
+      <div contenteditable="true" onblur="editHot(${n.id},this.textContent)" style="white-space:pre-wrap;">${esc(n.content)}</div>
+      <div class="note-time">${n.time}</div>
+      <span class="del-btn" onclick="delHot(${n.id})">✕</span>
+    `;
+    el.appendChild(d);
+  });
+}
+function addHot() {
+  const notes = DB.get('hotNotes',[]);
+  notes.unshift({id:nextId(notes), content:'记录二创思路…', time:getTimeStr()});
+  DB.set('hotNotes',notes); renderHotNotes(); showSave();
+}
+function delHot(id) {
+  DB.set('hotNotes', DB.get('hotNotes',[]).filter(n=>n.id!==id));
+  renderHotNotes(); showSave();
+}
+function editHot(id, val) {
+  const notes = DB.get('hotNotes',[]);
+  const n = notes.find(x=>x.id===id); if(!n) return;
+  n.content = val; DB.set('hotNotes',notes); showSave();
+}
+
+// ============ 4. 记账 ============
+function renderRecords() {
+  const records = DB.get('records', []);
+  const list = document.getElementById('recordList');
+  list.innerHTML = '';
+  const typeMap = {
+    'in': {cls:'in', sign:'+', label:'收入', color:'#ee5a52'},
+    'out': {cls:'out', sign:'-', label:'支出', color:'#3b82f6'},
+    'pending-out': {cls:'out', sign:'', label:'待付', color:'#f5b500'},
+    'pending-in': {cls:'in', sign:'', label:'待收', color:'#a855f7'},
+  };
+  records.forEach(r => {
+    const m = typeMap[r.type];
+    const el = document.createElement('div');
+    el.className = 'record-item';
+    el.innerHTML = `
+      <div class="l">
+        <span class="cat-dot" style="background:${m.color}"></span>
+        <span contenteditable="true" onblur="editRecord(${r.id},'desc',this.textContent)">${esc(r.desc)}</span>
       </div>
-    `);
-    document.getElementById('pwaClose').onclick = hideInstallToast;
-    document.getElementById('pwaInstall').onclick = async () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      hideInstallToast();
+      <span class="amount ${m.cls}" style="color:${m.color};">
+        ${m.sign}¥<span contenteditable="true" onblur="editRecord(${r.id},'amount',this.textContent)">${r.amount}</span>
+      </span>
+      <span class="del-btn" onclick="delRecord(${r.id})">✕</span>
+    `;
+    list.appendChild(el);
+  });
+  // 计算汇总
+  let income=0, expense=0, pOut=0, pIn=0;
+  records.forEach(r => {
+    const a = parseFloat(r.amount)||0;
+    if(r.type==='in') income+=a;
+    else if(r.type==='out') expense+=a;
+    else if(r.type==='pending-out') pOut+=a;
+    else if(r.type==='pending-in') pIn+=a;
+  });
+  document.getElementById('sumIncome').textContent = '+¥'+income;
+  document.getElementById('sumExpense').textContent = '-¥'+expense;
+  document.getElementById('sumPendingOut').textContent = '¥'+pOut;
+  document.getElementById('sumPendingIn').textContent = '¥'+pIn;
+}
+function addRecord() {
+  const desc = document.getElementById('recDesc').value.trim();
+  const amount = parseFloat(document.getElementById('recAmount').value);
+  const type = document.getElementById('recType').value;
+  if(!desc || isNaN(amount)) return;
+  const records = DB.get('records',[]);
+  records.push({id:nextId(records), desc, amount, type});
+  DB.set('records',records);
+  document.getElementById('recDesc').value='';
+  document.getElementById('recAmount').value='';
+  document.getElementById('newRecordInput').style.display='none';
+  renderRecords(); showSave();
+}
+function delRecord(id) {
+  DB.set('records', DB.get('records',[]).filter(r=>r.id!==id));
+  renderRecords(); showSave();
+}
+function editRecord(id, field, val) {
+  const records = DB.get('records',[]);
+  const r = records.find(x=>x.id===id); if(!r) return;
+  if(field==='amount') r.amount = parseFloat(val)||0;
+  else r[field] = val;
+  DB.set('records',records); renderRecords(); showSave();
+}
+
+// ============ 5. 备忘录 ============
+function renderNotes() {
+  const notes = DB.get('notes', []);
+  const list = document.getElementById('noteList');
+  list.innerHTML = '';
+  notes.forEach(n => {
+    const el = document.createElement('div');
+    el.className = 'note-item';
+    el.innerHTML = `
+      <div contenteditable="true" onblur="editNote(${n.id},this.textContent)" style="white-space:pre-wrap;">${esc(n.content)}</div>
+      <div class="note-time">${n.time}</div>
+      <span class="del-btn" onclick="delNote(${n.id})">✕</span>
+    `;
+    list.appendChild(el);
+  });
+}
+function addNote() {
+  const notes = DB.get('notes',[]);
+  notes.unshift({id:nextId(notes), content:'写点什么…', time:getTimeStr()});
+  DB.set('notes',notes); renderNotes(); showSave();
+}
+function delNote(id) {
+  DB.set('notes', DB.get('notes',[]).filter(n=>n.id!==id));
+  renderNotes(); showSave();
+}
+function editNote(id, val) {
+  const notes = DB.get('notes',[]);
+  const n = notes.find(x=>x.id===id); if(!n) return;
+  n.content = val; n.time = getTimeStr(); DB.set('notes',notes); showSave();
+}
+
+// ============ 6. 英语 ============
+function renderWords() {
+  const words = DB.get('words', []);
+  const list = document.getElementById('enWordList');
+  list.innerHTML = '';
+  words.forEach(w => {
+    const el = document.createElement('div');
+    el.className = 'en-card';
+    el.innerHTML = `
+      <div class="en-word" contenteditable="true" onblur="editWord(${w.id},'word',this.textContent)">${esc(w.word)}</div>
+      <div class="en-phonetic" contenteditable="true" onblur="editWord(${w.id},'phonetic',this.textContent)">${esc(w.phonetic)}</div>
+      <div class="en-meaning" contenteditable="true" onblur="editWord(${w.id},'meaning',this.textContent)">${esc(w.meaning)}</div>
+      <div class="en-example" contenteditable="true" onblur="editWord(${w.id},'example',this.textContent)">${esc(w.example)}</div>
+      <span class="del-btn" style="float:right;cursor:pointer;color:#ccc;" onclick="delWord(${w.id})">✕</span>
+    `;
+    list.appendChild(el);
+  });
+  document.getElementById('enDay').textContent = 'Day ' + DB.get('enDay',1);
+}
+function addWord() {
+  const words = DB.get('words',[]);
+  words.push({id:nextId(words), word:'new word', phonetic:'/phonetic/', meaning:'释义', example:'Example sentence.'});
+  DB.set('words',words);
+  DB.set('enDay', DB.get('enDay',1)); // 不自动加天数
+  renderWords(); showSave();
+}
+function delWord(id) {
+  DB.set('words', DB.get('words',[]).filter(w=>w.id!==id));
+  renderWords(); showSave();
+}
+function editWord(id, field, val) {
+  const words = DB.get('words',[]);
+  const w = words.find(x=>x.id===id); if(!w) return;
+  w[field] = val; DB.set('words',words); showSave();
+}
+
+// ============ 快速添加 ============
+function quickAdd() {
+  const input = document.getElementById('quickInput');
+  const text = input.value.trim(); if(!text) return;
+  const notes = DB.get('notes',[]);
+  notes.unshift({id:nextId(notes), content:text, time:getTimeStr()});
+  DB.set('notes',notes); input.value=''; renderNotes(); showSave();
+  goTo('memo');
+}
+
+// ============ 导入导出 ============
+function exportData() {
+  const data = {
+    tasks: DB.get('tasks',[]), ideas: DB.get('ideas',[]),
+    records: DB.get('records',[]), notes: DB.get('notes',[]),
+    words: DB.get('words',[]), hotNotes: DB.get('hotNotes',[]),
+    enDay: DB.get('enDay',1), exportTime: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '工作台备份_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+}
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        Object.keys(data).forEach(k => DB.set(k, data[k]));
+        renderAll(); showSave();
+        alert('导入成功！');
+      } catch(err) { alert('文件格式错误'); }
     };
-  });
+    reader.readAsText(file);
+  };
+  input.click();
+}
 
-  // iOS Safari 不支持 beforeinstallprompt，给出引导提示
-  function isIOS() {
-    const ua = navigator.userAgent;
-    return /iPhone|iPad|iPod/.test(ua) && !/CriOS|FxiOS/.test(ua);
-  }
+// ============ 工具 ============
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function goTo(target) {
+  document.querySelectorAll('.menu-item').forEach(i=>i.classList.remove('active'));
+  document.querySelector(`.menu-item[data-target="${target}"]`)?.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+target)?.classList.add('active');
+}
+function renderAll() { renderTasks(); renderIdeas(); renderRecords(); renderNotes(); renderWords(); renderHotNotes(); }
+
+// ============ 初始化 ============
+function tick() {
+  const d = new Date();
+  document.getElementById('clock').textContent = String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  const days = ['日','一','二','三','四','五','六'];
+  document.getElementById('dateStr').textContent = `${d.getMonth()+1}月${d.getDate()}日 周${days[d.getDay()]} · 搜索…`;
+}
+tick(); setInterval(tick, 30000);
+
+document.querySelectorAll('.menu-item').forEach(it => {
+  it.addEventListener('click', () => goTo(it.dataset.target));
+});
+document.querySelectorAll('.en-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.en-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// 首次渲染
+renderAll();
+
+// ============ PWA 逻辑 ============
+function updateOnline() {
+  document.getElementById('offlineBanner').classList.toggle('show', !navigator.onLine);
+}
+window.addEventListener('online', updateOnline);
+window.addEventListener('offline', updateOnline);
+updateOnline();
+
+function applyHash() {
+  const h = (location.hash||'').replace('#',''); if(h) goTo(h);
+}
+applyHash(); window.addEventListener('hashchange', applyHash);
+
+let deferredPrompt = null;
+function showInstallToast(content) {
+  let toast = document.getElementById('pwaToast');
+  if (!toast) { toast = document.createElement('div'); toast.className='pwa-toast'; toast.id='pwaToast'; document.body.appendChild(toast); }
+  toast.innerHTML = content;
+  requestAnimationFrame(()=>toast.classList.add('show'));
+}
+function hideInstallToast() { document.getElementById('pwaToast')?.classList.remove('show'); }
+
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  if (isStandalone) return;
+  showInstallToast(`
+    <div class="toast-head">
+      <img src="icons/icon-192.png" alt="">
+      <div><div class="toast-title">把工作台装到桌面</div><div class="toast-sub">像 App 一样全屏使用 · 支持离线</div></div>
+    </div>
+    <div class="toast-body">点击「立即安装」，桌面会生成独立图标，全屏打开无需浏览器。</div>
+    <div class="toast-actions">
+      <button class="btn btn-ghost" onclick="hideInstallToast()">稍后</button>
+      <button class="btn btn-primary" id="pwaInstall">立即安装</button>
+    </div>`);
+  document.getElementById('pwaInstall').onclick = async () => {
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt(); await deferredPrompt.userChoice;
+    deferredPrompt = null; hideInstallToast();
+  };
+});
+
+function isIOS() { return /iPhone|iPad|iPod/.test(navigator.userAgent) && !/CriOS|FxiOS/.test(navigator.userAgent); }
+window.addEventListener('load', () => {
+  if (isStandalone) return;
+  setTimeout(() => {
+    if (isIOS()) {
+      showInstallToast(`
+        <div class="toast-head">
+          <img src="icons/icon-192.png" alt="">
+          <div><div class="toast-title">添加到主屏幕</div><div class="toast-sub">iPhone 用户请手动操作</div></div>
+        </div>
+        <div class="toast-body">点击底部 <b>分享按钮 ⬆️</b> → 选择 <b>「添加到主屏幕」</b>，即可像 App 一样全屏使用。</div>
+        <div class="toast-actions"><button class="btn btn-primary" onclick="hideInstallToast()">知道了</button></div>`);
+    }
+  }, 2500);
+});
+
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    if (isStandalone) return; // 已经装上了，不打扰
-    // 首次访问 3 秒后提示
-    setTimeout(() => {
-      if (isIOS()) {
-        showInstallToast(`
-          <div class="toast-head">
-            <img src="icons/icon-192.png" alt="">
-            <div>
-              <div class="toast-title">添加到主屏幕</div>
-              <div class="toast-sub">iPhone 用户请手动操作</div>
-            </div>
-          </div>
-          <div class="toast-body">点击底部 <b>分享按钮 ⬆️</b> → 选择 <b>「添加到主屏幕」</b>，即可像 App 一样全屏使用，支持离线打开。</div>
-          <div class="toast-actions">
-            <button class="btn btn-primary" id="pwaClose">知道了</button>
-          </div>
-        `);
-        const c = document.getElementById('pwaClose');
-        if (c) c.onclick = hideInstallToast;
-      }
-      // 安卓/桌面 Chrome 会由 beforeinstallprompt 触发，不在此重复弹
-    }, 2500);
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('[PWA] SW registered', reg.scope))
+      .catch(err => console.warn('[PWA] SW failed', err));
   });
-
-  // 注册 Service Worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('[PWA] SW registered', reg.scope))
-        .catch(err => console.warn('[PWA] SW failed', err));
-    });
-  }
-
-  // 已安装且 standalone：监听更新
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      // 静默刷新
-      location.reload();
-    });
-  }
+  navigator.serviceWorker.addEventListener('controllerchange', () => location.reload());
+}
 </script>
 </body>
 </html>
