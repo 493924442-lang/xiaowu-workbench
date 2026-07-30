@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#ff7eb3">
+<meta name="description" content="小吴的私人创作工作台：每日工作、灵感、热点二创、记账、备忘录、英语练习，六合一。">
+
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<!-- iOS Safari 全屏 PWA 支持 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="工作台">
+<meta name="format-detection" content="telephone=no">
+
+<title>我的工作台 · 小吴</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    background: #fff0f5;
+    color: #2b2b2b;
+    overflow: hidden;
+  }
+
+  /* 顶部状态栏（模拟） */
+  .status-bar {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111;
+    background: rgba(255,255,255,0.0);
+    position: absolute; top: 0; left: 0; right: 0;
+    z-index: 10;
+  }
+  .status-bar .right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .status-bar .notch {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    top: 8px; width: 110px; height: 28px;
+    background: #111; border-radius: 20px;
+  }
+
+  /* 顶部标题栏 */
+  .top-header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    background: transparent;
+    margin-top: 44px;
+    position: relative;
+    z-index: 5;
+  }
+  .top-header .title-wrap {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, #ffc0cb, #ff9ec0);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  .user-name { font-size: 16px; font-weight: 700; color: #1f1f1f; }
+  .user-sub { font-size: 11px; color: #8a8a8a; margin-top: 2px; }
+
+  .search-box {
+    flex: 1; margin-left: 14px; height: 36px;
+    background: rgba(255,255,255,0.7); backdrop-filter: blur(6px);
+    border-radius: 18px;
+    display: flex; align-items: center; padding: 0 14px;
+    font-size: 13px; color: #b8b8b8;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+  .search-box span { flex: 1; }
+
+  /* 主容器 */
+  .app {
+    height: calc(100% - 44px);
+    margin-top: 44px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* 中间主体 */
+  .main {
+    flex: 1;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 左侧栏 */
+  .sidebar {
+    width: 168px;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    margin: 8px 6px 8px 12px;
+    padding: 14px 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 4;
+    overflow-y: auto;
+  }
+
+  .menu-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #2b2b2b;
+    font-weight: 500;
+    transition: all .2s ease;
+    position: relative;
+  }
+  .menu-item .icon {
+    width: 22px; height: 22px; display: inline-flex;
+    align-items: center; justify-content: center; font-size: 18px;
+  }
+  .menu-item.active {
+    background: #ff7eb3;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(255,126,179,0.35);
+  }
+  .menu-item:hover:not(.active) { background: rgba(255,126,179,0.12); }
+
+  /* 右侧内容区 */
+  .content {
+    flex: 1;
+    margin: 8px 12px 8px 6px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    padding: 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .panel { display: none; animation: fade .25s ease; }
+  .panel.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none;} }
+
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .panel-title { font-size: 16px; font-weight: 700; color: #2b2b2b; display: flex; align-items: center; gap: 8px;}
+  .panel-title .badge {
+    background: #ff7eb3; color: #fff; font-size: 10px;
+    padding: 2px 6px; border-radius: 6px; font-weight: 600;
+  }
+  .sync-btn {
+    background: #ff7eb3; color: #fff; border: none;
+    padding: 7px 12px; border-radius: 14px; font-size: 12px;
+    display: flex; align-items: center; gap: 5px; cursor: pointer;
+    box-shadow: 0 2px 6px rgba(255,126,179,0.3);
+  }
+  .panel-tip { font-size: 12px; color: #8a8a8a; margin-bottom: 12px; }
+
+  /* 任务列表 */
+  .task-list { display: flex; flex-direction: column; gap: 8px; }
+  .task {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .task .check {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 2px solid #d0d0d0;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all .2s;
+  }
+  .task.done .check { background: #ff7eb3; border-color: #ff7eb3; color: #fff; }
+  .task.done .task-text { text-decoration: line-through; color: #aaa; }
+  .task .task-text { flex: 1; }
+  .task .task-tag {
+    font-size: 10px; padding: 2px 6px; border-radius: 6px;
+    background: #f1f1f1; color: #777;
+  }
+  .task .task-tag.urgent { background: #fff0eb; color: #e85a3c; }
+  .task .task-tag.normal { background: #eaf3ff; color: #3b82f6; }
+
+  /* 进度环 */
+  .progress-card {
+    background: linear-gradient(135deg, #ff7eb3, #ffb3c8);
+    color: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .progress-ring {
+    position: relative;
+    width: 64px; height: 64px;
+  }
+  .progress-ring svg { transform: rotate(-90deg); }
+  .progress-ring .num {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+  }
+  .progress-info h4 { font-size: 14px; margin-bottom: 4px; }
+  .progress-info p { font-size: 11px; opacity: .85; line-height: 1.4; }
+
+  /* 灵感卡片 */
+  .idea-card {
+    background: linear-gradient(135deg, #fffbe6, #fff5d6);
+    border-left: 3px solid #f5b500;
+    padding: 10px 12px; border-radius: 8px;
+    margin-bottom: 8px; font-size: 13px; color: #5a4500;
+    line-height: 1.5;
+  }
+  .idea-card .idea-title { font-weight: 700; margin-bottom: 4px; color: #b87600;}
+  .idea-card .tag {
+    display: inline-block; font-size: 10px;
+    background: rgba(245,181,0,0.15); color: #b87600;
+    padding: 1px 6px; border-radius: 4px; margin-right: 4px;
+  }
+
+  /* 热点视频 */
+  .hot-item {
+    display: flex; gap: 10px;
+    background: #fff; padding: 10px;
+    border-radius: 12px; border: 1px solid #f0f0f0;
+    margin-bottom: 8px;
+  }
+  .hot-thumb {
+    width: 70px; height: 70px; border-radius: 8px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+  .hot-thumb.b2 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+  .hot-thumb.b3 { background: linear-gradient(135deg, #fa709a, #fee140); }
+  .hot-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  .hot-title { font-size: 13px; font-weight: 600; line-height: 1.3; }
+  .hot-meta { font-size: 11px; color: #888; display: flex; gap: 8px; margin-top: 4px;}
+  .hot-meta .hot { color: #ee5a52; font-weight: 600;}
+
+  /* 记账 */
+  .account-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .acc-card {
+    background: #fff; border-radius: 12px;
+    padding: 10px; text-align: center;
+    border: 1px solid #f0f0f0;
+  }
+  .acc-card.income h4 { color: #ee5a52; font-size: 16px; }
+  .acc-card.expense h4 { color: #3b82f6; font-size: 16px; }
+  .acc-card.pending-out h4 { color: #f5b500; font-size: 16px; }
+  .acc-card.pending-in h4 { color: #a855f7; font-size: 16px; }
+  .acc-card p { font-size: 11px; color: #888; margin-top: 2px;}
+
+  .record-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; background: #fff;
+    border-radius: 10px; border: 1px solid #f0f0f0;
+    margin-bottom: 6px; font-size: 13px;
+  }
+  .record-item .l { display: flex; align-items: center; gap: 8px;}
+  .record-item .cat-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .record-item .amount { font-weight: 700; }
+  .record-item .amount.in { color: #ee5a52; }
+  .record-item .amount.out { color: #3b82f6; }
+
+  /* 备忘录 */
+  .note-item {
+    background: #fffbcc;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    position: relative;
+    box-shadow: 1px 1px 0 rgba(0,0,0,0.04);
+  }
+  .note-item .note-time { font-size: 10px; color: #a08030; margin-top: 6px;}
+  .note-item .pin { position: absolute; top: 6px; right: 8px; font-size: 11px; color: #c89400;}
+
+  /* 英语练习 */
+  .en-tabs {
+    display: flex; gap: 6px; margin-bottom: 10px;
+  }
+  .en-tab {
+    flex: 1; padding: 7px 0; text-align: center;
+    background: #fff; border-radius: 10px; font-size: 12px;
+    color: #555; cursor: pointer; border: 1px solid #f0f0f0;
+    font-weight: 500;
+  }
+  .en-tab.active { background: #ff7eb3; color: #fff; border-color: #ff7eb3; }
+
+  .en-card {
+    background: #fff; border-radius: 12px;
+    padding: 14px; border: 1px solid #f0f0f0;
+    margin-bottom: 8px;
+  }
+  .en-word { font-size: 22px; font-weight: 700; color: #2b2b2b;}
+  .en-phonetic { font-size: 12px; color: #888; margin: 4px 0;}
+  .en-meaning { font-size: 13px; color: #3b82f6; margin-top: 6px;}
+  .en-example { font-size: 12px; color: #666; margin-top: 6px; line-height: 1.5; font-style: italic;}
+
+  /* 底部输入栏 */
+  .bottom-input {
+    height: 50px;
+    padding: 0 14px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; gap: 10px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+  .bottom-input input {
+    flex: 1; height: 34px; border-radius: 17px;
+    border: none; background: #fff; padding: 0 14px;
+    font-size: 13px; outline: none;
+    box-shadow: inset 0 0 0 1px #eee;
+  }
+  .bottom-input .icon-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: transparent; font-size: 18px; color: #555; cursor: pointer;
+  }
+
+  /* 底部 Tab 切换：去掉，使用侧边栏即可 */
+  .corner-action {
+    position: fixed;
+    right: 18px; bottom: 70px;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: linear-gradient(135deg, #ee5a52, #ff7b6b);
+    color: #fff; font-size: 28px; font-weight: 300;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(238,90,82,0.4);
+    cursor: pointer; z-index: 6;
+  }
+
+  /* 滚动条美化 */
+  ::-webkit-scrollbar { width: 4px; height: 4px;}
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px;}
+
+  /* 响应式 */
+  @media (max-width: 380px) {
+    .sidebar { width: 140px; }
+    .menu-item { font-size: 13px; padding: 9px 10px;}
+  }
+
+  /* ============ PWA 安装提示 & 离线提示 ============ */
+  .pwa-toast {
+    position: fixed;
+    left: 16px; right: 16px;
+    bottom: 80px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+    padding: 14px 14px 12px;
+    z-index: 999;
+    transform: translateY(160%);
+    transition: transform .35s cubic-bezier(.2,.8,.2,1);
+    font-size: 13px;
+  }
+  .pwa-toast.show { transform: translateY(0); }
+  .pwa-toast .toast-head {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+  }
+  .pwa-toast .toast-head img { width: 32px; height: 32px; border-radius: 8px; }
+  .pwa-toast .toast-title { font-size: 14px; font-weight: 700; color:#2b2b2b;}
+  .pwa-toast .toast-sub { font-size: 11px; color:#8a8a8a; margin-top:1px;}
+  .pwa-toast .toast-body { color: #555; line-height: 1.5; margin: 6px 0 10px;}
+  .pwa-toast .toast-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .pwa-toast .btn {
+    border: none; cursor: pointer; font-size: 13px;
+    padding: 8px 16px; border-radius: 16px; font-weight: 600;
+  }
+  .pwa-toast .btn-primary { background: #ff7eb3; color: #fff; }
+  .pwa-toast .btn-ghost { background: #f1f1f1; color: #555; }
+
+  .offline-banner {
+    position: fixed; left: 0; right: 0; top: 0;
+    background: #ee5a52; color: #fff;
+    font-size: 12px; text-align: center;
+    padding: 6px 0; z-index: 1000;
+    transform: translateY(-100%);
+    transition: transform .3s ease;
+  }
+  .offline-banner.show { transform: translateY(0); }
+
+  /* iOS safe area */
+  @supports (padding: max(0px)) {
+    .bottom-input { padding-bottom: env(safe-area-inset-bottom); }
+    .status-bar { padding-top: env(safe-area-inset-top); height: calc(44px + env(safe-area-inset-top)); }
+    .app { margin-top: calc(44px + env(safe-area-inset-top)); height: calc(100% - 44px - env(safe-area-inset-top)); }
+  }
+</style>
+</head>
+<body>
+
+<!-- 离线提示横幅 -->
+<div class="offline-banner" id="offlineBanner">📡 当前离线，正在显示本地缓存内容</div>
+
+<!-- 模拟状态栏 -->
+<div class="status-bar">
+  <div class="left" id="clock">09:57</div>
+  <div class="notch"></div>
+  <div class="right">📶 📡 🔋</div>
+</div>
+
+<div class="app">
+  <!-- 顶部 -->
+  <div class="top-header">
+    <div class="title-wrap">
+      <div class="avatar">吴</div>
+      <div>
+        <div class="user-name">小吴</div>
+        <div class="user-sub">创作工作台</div>
+      </div>
+    </div>
+    <div class="search-box"><span>2026年7月21日 · 搜索…</span>🔍</div>
+  </div>
+
+  <!-- 主体 -->
+  <div class="main">
+
+    <!-- 左侧菜单 -->
+    <div class="sidebar">
+      <div class="menu-item active" data-target="daily">
+        <span class="icon">📋</span><span>每日工作</span>
+      </div>
+      <div class="menu-item" data-target="inspire">
+        <span class="icon">💡</span><span>全体每日灵感</span>
+      </div>
+      <div class="menu-item" data-target="hotvideo">
+        <span class="icon">🔥</span><span>爆款热点视频2创</span>
+      </div>
+      <div class="menu-item" data-target="account">
+        <span class="icon">📊</span><span>每日记账</span>
+      </div>
+      <div class="menu-item" data-target="memo">
+        <span class="icon">📝</span><span>备忘录</span>
+      </div>
+      <div class="menu-item" data-target="english">
+        <span class="icon">🌍</span><span>英语练习</span>
+      </div>
+    </div>
+
+    <!-- 右侧内容 -->
+    <div class="content">
+
+      <!-- 1. 每日工作 -->
+      <div class="panel active" id="panel-daily">
+        <div class="panel-header">
+          <div class="panel-title">📋 每日工作 <span class="badge">今日</span></div>
+          <button class="sync-btn">🔄 同步到手机</button>
+        </div>
+        <div class="panel-tip">完成一项打勾，进度一目了然</div>
+
+        <div class="progress-card">
+          <div class="progress-ring">
+            <svg width="64" height="64">
+              <circle cx="32" cy="32" r="28" stroke="rgba(255,255,255,0.25)" stroke-width="6" fill="none"/>
+              <circle cx="32" cy="32" r="28" stroke="#fff" stroke-width="6" fill="none"
+                stroke-dasharray="176" stroke-dashoffset="70" stroke-linecap="round"/>
+            </svg>
+            <div class="num">60%</div>
+          </div>
+          <div class="progress-info">
+            <h4>今日完成 3/5</h4>
+            <p>加油！还有 2 项任务等你搞定</p>
+          </div>
+        </div>
+
+        <div class="task-list">
+          <div class="task done">
+            <div class="check">✓</div>
+            <div class="task-text">晨间选题会（30min）</div>
+            <span class="task-tag">已完成</span>
+          </div>
+          <div class="task done">
+            <div class="check">✓</div>
+            <div class="task-text">短视频脚本撰写 ×2</div>
+            <span class="task-tag">已完成</span>
+          </div>
+          <div class="task done">
+            <div class="check">✓</div>
+            <div class="task-text">回复评论区高赞留言</div>
+            <span class="task-tag">已完成</span>
+          </div>
+          <div class="task">
+            <div class="check"></div>
+            <div class="task-text">剪辑爆款二创视频</div>
+            <span class="task-tag urgent">紧急</span>
+          </div>
+          <div class="task">
+            <div class="check"></div>
+            <div class="task-text">整理今日记账数据</div>
+            <span class="task-tag normal">普通</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 全体每日灵感 -->
+      <div class="panel" id="panel-inspire">
+        <div class="panel-header">
+          <div class="panel-title">💡 全体每日灵感</div>
+          <button class="sync-btn">✨ 新灵感</button>
+        </div>
+        <div class="panel-tip">AI + 团队共创 · 每日精选 5 条</div>
+
+        <div class="idea-card">
+          <div class="idea-title">#职场成长</div>
+          <div class="tag">AI工具</div>
+          <div class="tag">效率</div>
+          <p style="margin-top:6px;">"只会空想，但行动力为0？恭喜你，你的时代来了！" 用反差感切入AI工具主题，引导观众自嘲式共鸣。</p>
+        </div>
+        <div class="idea-card">
+          <div class="idea-title">#生活方式</div>
+          <div class="tag">生活</div>
+          <p style="margin-top:6px;">下班后 1 小时决定你的人生——3 个微习惯让你悄悄变强。</p>
+        </div>
+        <div class="idea-card">
+          <div class="idea-title">#情感共鸣</div>
+          <div class="tag">情感</div>
+          <p style="margin-top:6px;">成年人的崩溃都是从"我没事"开始的。给陌生人一个微笑，也许就能拯救今天。</p>
+        </div>
+        <div class="idea-card">
+          <div class="idea-title">#知识科普</div>
+          <div class="tag">科普</div>
+          <p style="margin-top:6px;">为什么飞机起飞前要滑行那么久？90% 的人都误解了。</p>
+        </div>
+        <div class="idea-card">
+          <div class="idea-title">#美食探店</div>
+          <div class="tag">探店</div>
+          <p style="margin-top:6px;">藏在巷子里的 15年老店，老板一句话让人破防……</p>
+        </div>
+      </div>
+
+      <!-- 3. 爆款热点视频二创 -->
+      <div class="panel" id="panel-hotvideo">
+        <div class="panel-header">
+          <div class="panel-title">🔥 爆款热点视频 / 二创 <span class="badge">实时</span></div>
+          <button class="sync-btn">📥 收藏夹</button>
+        </div>
+        <div class="panel-tip">全网热门 · 可一键二创跟拍</div>
+
+        <div class="hot-item">
+          <div class="hot-thumb">🎬</div>
+          <div class="hot-info">
+            <div class="hot-title">"我每天要做的事情的计划" · 跟着AI搭工作台</div>
+            <div class="hot-meta"><span class="hot">🔥 23.0w 赞</span><span>3034 评论</span><span>11.8w 收藏</span></div>
+          </div>
+        </div>
+        <div class="hot-item">
+          <div class="hot-thumb b2">📱</div>
+          <div class="hot-info">
+            <div class="hot-title">AI 工具让普通人也能做老板？这3个必学</div>
+            <div class="hot-meta"><span class="hot">🔥 18.6w 赞</span><span>2840 评论</span><span>9.2w 收藏</span></div>
+          </div>
+        </div>
+        <div class="hot-item">
+          <div class="hot-thumb b3">🚀</div>
+          <div class="hot-info">
+            <div class="hot-title">社会榜TOP11 · 一天搭出你的AI工作台</div>
+            <div class="hot-meta"><span class="hot">🔥 12.4w 赞</span><span>1620 评论</span><span>6.4w 收藏</span></div>
+          </div>
+        </div>
+        <div class="hot-item">
+          <div class="hot-thumb">✨</div>
+          <div class="hot-info">
+            <div class="hot-title">AI 时代来临，打工人如何不被淘汰？</div>
+            <div class="hot-meta"><span class="hot">🔥 9.8w 赞</span><span>1102 评论</span><span>5.1w 收藏</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. 每日记账 -->
+      <div class="panel" id="panel-account">
+        <div class="panel-header">
+          <div class="panel-title">📊 每日记账 <span class="badge">7月21日</span></div>
+          <button class="sync-btn">➕ 记一笔</button>
+        </div>
+
+        <div class="account-summary">
+          <div class="acc-card income">
+            <p>今日收入</p>
+            <h4>+¥1,280</h4>
+          </div>
+          <div class="acc-card expense">
+            <p>今日支出</p>
+            <h4>-¥328</h4>
+          </div>
+          <div class="acc-card pending-out">
+            <p>未付款</p>
+            <h4>¥450</h4>
+          </div>
+          <div class="acc-card pending-in">
+            <p>未收款</p>
+            <h4>¥800</h4>
+          </div>
+        </div>
+
+        <div class="record-item">
+          <div class="l"><span class="cat-dot" style="background:#ee5a52"></span>广告合作收入</div>
+          <span class="amount in">+¥1,200</span>
+        </div>
+        <div class="record-item">
+          <div class="l"><span class="cat-dot" style="background:#3b82f6"></span>午餐 · 牛肉面</div>
+          <span class="amount out">-¥28</span>
+        </div>
+        <div class="record-item">
+          <div class="l"><span class="cat-dot" style="background:#f5b500"></span>打车报销</div>
+          <span class="amount in">+¥80</span>
+        </div>
+        <div class="record-item">
+          <div class="l"><span class="cat-dot" style="background:#ff7eb3"></span>咖啡</div>
+          <span class="amount out">-¥35</span>
+        </div>
+        <div class="record-item">
+          <div class="l"><span class="cat-dot" style="background:#a855f7"></span>剪辑软件订阅</div>
+          <span class="amount out">-¥99</span>
+        </div>
+        <div class="record-item">
+          <div class="l"><span class="cat-dot" style="background:#ff6b6b"></span>晚餐 · 轻食</div>
+          <span class="amount out">-¥48</span>
+        </div>
+        <div class="record-item">
+          <div class="l"><span class="cat-dot" style="background:#10b981"></span>直播间打赏</div>
+          <span class="amount out">-¥118</span>
+        </div>
+        <div class="record-item">
+          <div class="l"><span class="cat-dot" style="background:#f5b500"></span>待付 · 场地租赁费</div>
+          <span class="amount out" style="color:#f5b500;">待付 ¥300</span>
+        </div>
+        <div class="record-item">
+          <div class="l"><span class="cat-dot" style="background:#f5b500"></span>待付 · 合作分成</div>
+          <span class="amount out" style="color:#f5b500;">待付 ¥150</span>
+        </div>
+        <div class="record-item">
+          <div class="l"><span class="cat-dot" style="background:#a855f7"></span>待收 · 品牌方尾款</div>
+          <span class="amount in" style="color:#a855f7;">待收 ¥800</span>
+        </div>
+      </div>
+
+      <!-- 5. 备忘录 -->
+      <div class="panel" id="panel-memo">
+        <div class="panel-header">
+          <div class="panel-title">📝 备忘录</div>
+          <button class="sync-btn">✏️ 新建</button>
+        </div>
+        <div class="panel-tip">想法瞬记 · 自动同步到云端</div>
+
+        <div class="note-item">
+          <div class="pin">📌</div>
+          <b>下周选题方向：</b><br>
+          ① AI 工具 vs 普通人的故事<br>
+          ② 一人公司真实日常<br>
+          ③ 副业 0 → 1 复盘
+          <div class="note-time">2026-07-21 09:12</div>
+        </div>
+        <div class="note-item">
+          <b>金句收集：</b><br>
+          "行动力，是这个时代最稀缺的才华。"
+          <div class="note-time">2026-07-20 22:48</div>
+        </div>
+        <div class="note-item">
+          <b>待办（重要）：</b><br>
+          • 联系老张谈合作分成<br>
+          • 把爆款二创视频发B站<br>
+          • 给妈妈打电话
+          <div class="note-time">2026-07-20 18:30</div>
+        </div>
+        <div class="note-item">
+          <b>灵感碎片：</b><br>
+          凌晨3点的便利店，最能看清一座城市的底色……
+          <div class="note-time">2026-07-19 03:14</div>
+        </div>
+      </div>
+
+      <!-- 6. 英语练习 -->
+      <div class="panel" id="panel-english">
+        <div class="panel-header">
+          <div class="panel-title">🌍 英语练习 <span class="badge">Day 12</span></div>
+          <button class="sync-btn">🎙️ 跟读</button>
+        </div>
+
+        <div class="en-tabs">
+          <div class="en-tab active">单词</div>
+          <div class="en-tab">听力</div>
+          <div class="en-tab">口语</div>
+          <div class="en-tab">写作</div>
+        </div>
+
+        <div class="en-card">
+          <div class="en-word">grind <span style="font-size:14px;color:#888;">v.</span></div>
+          <div class="en-phonetic">/ɡraɪnd/</div>
+          <div class="en-meaning">n. 苦差事；v. 磨，碾；努力工作</div>
+          <div class="en-example">"The daily grind never stops."<br>每日枯燥的工作不会停止。</div>
+        </div>
+        <div class="en-card">
+          <div class="en-word">leverage <span style="font-size:14px;color:#888;">v.</span></div>
+          <div class="en-phonetic">/ˈlevərɪdʒ/</div>
+          <div class="en-meaning">v. 利用；n. 影响力，杠杆作用</div>
+          <div class="en-example">"Leverage AI to 10x your output."<br>利用AI让你的产出放大10倍。</div>
+        </div>
+        <div class="en-card">
+          <div class="en-word">mindset <span style="font-size:14px;color:#888;">n.</span></div>
+          <div class="en-phonetic">/ˈmaɪndset/</div>
+          <div class="en-meaning">n. 思维模式，心态</div>
+          <div class="en-example">"A growth mindset changes everything."<br>成长型思维改变一切。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 底部输入 -->
+  <div class="bottom-input">
+    <input type="text" placeholder="发条评论，和大家一起讨论">
+    <div class="icon-btn">🖼️</div>
+    <div class="icon-btn">@</div>
+    <div class="icon-btn">😊</div>
+  </div>
+</div>
+
+<div class="corner-action" title="新增">+</div>
+
+<script>
+  // 实时时钟
+  function tick() {
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    document.getElementById('clock').textContent = hh + ':' + mm;
+  }
+  tick(); setInterval(tick, 30000);
+
+  // 切换左侧菜单
+  const items = document.querySelectorAll('.menu-item');
+  const panels = document.querySelectorAll('.panel');
+  items.forEach(it => {
+    it.addEventListener('click', () => {
+      items.forEach(i => i.classList.remove('active'));
+      it.classList.add('active');
+      const target = it.dataset.target;
+      panels.forEach(p => p.classList.remove('active'));
+      const el = document.getElementById('panel-' + target);
+      if (el) el.classList.add('active');
+    });
+  });
+
+  // 任务打勾
+  document.querySelectorAll('.task').forEach(t => {
+    t.querySelector('.check').addEventListener('click', e => {
+      e.stopPropagation();
+      t.classList.toggle('done');
+      const c = t.querySelector('.check');
+      c.textContent = t.classList.contains('done') ? '✓' : '';
+      updateProgress();
+    });
+  });
+
+  function updateProgress() {
+    const tasks = document.querySelectorAll('#panel-daily .task');
+    const done = document.querySelectorAll('#panel-daily .task.done');
+    const pct = Math.round(done.length / tasks.length * 100);
+    document.querySelector('.progress-ring .num').textContent = pct + '%';
+    document.querySelector('.progress-info h4').textContent = `今日完成 ${done.length}/${tasks.length}`;
+    const remain = tasks.length - done.length;
+    document.querySelector('.progress-info p').textContent =
+      remain === 0 ? '完美收工！今天你太棒了 🎉' : `加油！还有 ${remain} 项任务等你搞定`;
+    const ring = document.querySelector('.progress-ring svg circle:nth-child(2)');
+    const total = 176;
+    ring.setAttribute('stroke-dashoffset', total - total * pct / 100);
+  }
+
+  // 英语 tab 切换
+  document.querySelectorAll('.en-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.en-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // 同步按钮假反馈
+  document.querySelectorAll('.sync-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const orig = btn.innerHTML;
+      btn.innerHTML = '✓ 已同步';
+      setTimeout(() => btn.innerHTML = orig, 1200);
+    });
+  });
+
+  // ============ PWA 逻辑 ============
+  // 离线/在线 监听
+  function updateOnline() {
+    const banner = document.getElementById('offlineBanner');
+    if (!navigator.onLine) banner.classList.add('show');
+    else banner.classList.remove('show');
+  }
+  window.addEventListener('online', updateOnline);
+  window.addEventListener('offline', updateOnline);
+  updateOnline();
+
+  // 通过 URL hash 跳转到指定模块（支持桌面快捷方式 shortcuts）
+  function applyHash() {
+    const h = (location.hash || '').replace('#','');
+    if (!h) return;
+    const map = { daily:'daily', inspire:'inspire', hotvideo:'hotvideo',
+                  account:'account', memo:'memo', english:'english' };
+    if (map[h]) {
+      const item = document.querySelector(`.menu-item[data-target="${map[h]}"]`);
+      if (item) item.click();
+    }
+  }
+  applyHash();
+  window.addEventListener('hashchange', applyHash);
+
+  // 安装提示弹窗（iOS 引导式 / 标准 beforeinstallprompt）
+  let deferredPrompt = null;
+
+  function showInstallToast(content) {
+    let toast = document.getElementById('pwaToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.className = 'pwa-toast';
+      toast.id = 'pwaToast';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = content;
+    requestAnimationFrame(() => toast.classList.add('show'));
+  }
+  function hideInstallToast() {
+    const toast = document.getElementById('pwaToast');
+    if (toast) toast.classList.remove('show');
+  }
+
+  // 检测是否已安装（standalone）
+  const isStandalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true ||
+    document.referrer.startsWith('android-app://');
+
+  // 标准浏览器（Chrome/Edge/Android）：捕获 beforeinstallprompt
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (isStandalone) return;
+    showInstallToast(`
+      <div class="toast-head">
+        <img src="icons/icon-192.png" alt="">
+        <div>
+          <div class="toast-title">把工作台装到桌面</div>
+          <div class="toast-sub">像 App 一样全屏使用 · 支持离线</div>
+        </div>
+      </div>
+      <div class="toast-body">点击「立即安装」，会在桌面生成一个独立图标，下次直接全屏打开，无需浏览器。</div>
+      <div class="toast-actions">
+        <button class="btn btn-ghost" id="pwaClose">稍后</button>
+        <button class="btn btn-primary" id="pwaInstall">立即安装</button>
+      </div>
+    `);
+    document.getElementById('pwaClose').onclick = hideInstallToast;
+    document.getElementById('pwaInstall').onclick = async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      hideInstallToast();
+    };
+  });
+
+  // iOS Safari 不支持 beforeinstallprompt，给出引导提示
+  function isIOS() {
+    const ua = navigator.userAgent;
+    return /iPhone|iPad|iPod/.test(ua) && !/CriOS|FxiOS/.test(ua);
+  }
+  window.addEventListener('load', () => {
+    if (isStandalone) return; // 已经装上了，不打扰
+    // 首次访问 3 秒后提示
+    setTimeout(() => {
+      if (isIOS()) {
+        showInstallToast(`
+          <div class="toast-head">
+            <img src="icons/icon-192.png" alt="">
+            <div>
+              <div class="toast-title">添加到主屏幕</div>
+              <div class="toast-sub">iPhone 用户请手动操作</div>
+            </div>
+          </div>
+          <div class="toast-body">点击底部 <b>分享按钮 ⬆️</b> → 选择 <b>「添加到主屏幕」</b>，即可像 App 一样全屏使用，支持离线打开。</div>
+          <div class="toast-actions">
+            <button class="btn btn-primary" id="pwaClose">知道了</button>
+          </div>
+        `);
+        const c = document.getElementById('pwaClose');
+        if (c) c.onclick = hideInstallToast;
+      }
+      // 安卓/桌面 Chrome 会由 beforeinstallprompt 触发，不在此重复弹
+    }, 2500);
+  });
+
+  // 注册 Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('[PWA] SW registered', reg.scope))
+        .catch(err => console.warn('[PWA] SW failed', err));
+    });
+  }
+
+  // 已安装且 standalone：监听更新
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      // 静默刷新
+      location.reload();
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "小吴的工作台",
+  "short_name": "工作台",
+  "description": "小吴的私人创作工作台：每日工作、灵感、热点二创、记账、备忘录、英语练习，六合一。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff0f5",
+  "theme_color": "#6f8b54",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "每日工作", "url": "./index.html#daily", "icons": [{"src":"icons/icon-192.png","sizes":"192x192"}] },
+    { "name": "每日灵感", "url": "./index.html#inspire", "icons": [{"src":"icons/icon-192.png","sizes":"192x192"}] },
+    { "name": "每日记账", "url": "./index.html#account", "icons": [{"src":"icons/icon-192.png","sizes":"192x192"}] }
+  ]
+}
