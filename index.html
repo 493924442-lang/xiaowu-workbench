@@ -86,9 +86,13 @@
     border-radius: 18px; padding: 14px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.06); overflow-y: auto; position: relative;
   }
-  .panel { display: none; animation: fade .25s ease; }
-  .panel.active { display: block; }
-  @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none;} }
+  .panel { display: none; }
+  .panel.active { display: block; animation: panel-pop .35s cubic-bezier(.2,.8,.2,1); }
+  @keyframes panel-pop {
+    0% { opacity: 0; transform: scale(0.92) translateX(30px); }
+    60% { opacity: 1; transform: scale(1.02) translateX(-2px); }
+    100% { opacity: 1; transform: scale(1) translateX(0); }
+  }
 
   .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .panel-title { font-size: 16px; font-weight: 700; color: #2b2b2b; display: flex; align-items: center; gap: 8px;}
@@ -841,8 +845,14 @@ function esc(s) {
 function goTo(target) {
   document.querySelectorAll('.menu-item').forEach(i=>i.classList.remove('active'));
   document.querySelector(`.menu-item[data-target="${target}"]`)?.classList.add('active');
+  // 先隐藏所有面板
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-'+target)?.classList.add('active');
+  const panel = document.getElementById('panel-'+target);
+  if (panel) {
+    // 强制重排，确保动画重新触发
+    void panel.offsetWidth;
+    panel.classList.add('active');
+  }
 }
 function renderAll() { renderTasks(); renderIdeas(); renderRecords(); renderNotes(); renderWords(); renderHotNotes(); }
 
