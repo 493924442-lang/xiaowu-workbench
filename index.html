@@ -1403,10 +1403,36 @@ window.addEventListener('load', () => {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('[PWA] SW registered', reg.scope))
+      .then(reg => {
+        console.log('[PWA] SW registered', reg.scope);
+        // 检测到新SW就触发更新
+        reg.addEventListener('updatefound', () => {
+          const nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', () => {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              // 新版本已安装，强制激活
+              nw.postMessage('SKIP_WAITING');
+            }
+          });
+        });
+      })
       .catch(err => console.warn('[PWA] SW failed', err));
+
+    // SW 控制权变更时自动刷新页面
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      console.log('[PWA] controller changed, reloading...');
+      location.reload();
+    });
+
+    // 接收 SW 的强制刷新消息
+    navigator.serviceWorker.addEventListener('message', e => {
+      if (e.data === 'FORCE_RELOAD') {
+        console.log('[PWA] force reload from SW');
+        location.reload();
+      }
+    });
   });
-  navigator.serviceWorker.addEventListener('controllerchange', () => location.reload());
 }
 </script>
 </body>

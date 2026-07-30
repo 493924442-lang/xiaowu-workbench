@@ -1,5 +1,5 @@
 // ===== 小吴工作台 Service Worker =====
-const CACHE_NAME = 'xiaowu-workbench-v12-swipe-back-read-checkin';
+const CACHE_NAME = 'xiaowu-workbench-v13-force-update';
 const ASSETS = [
   './',
   './index.html',
@@ -12,34 +12,36 @@ const ASSETS = [
   './icons/maskable-512.png'
 ];
 
-// 安装：预缓存核心资源
+// 安装：跳过等待，立即激活
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())
   );
 });
 
-// 激活：清理旧缓存
+// 激活：删除所有旧缓存，强制接管所有客户端
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    ).then(() => self.clients.claim()).then(() => {
+      // 通知所有客户端刷新
+      return self.clients.matchAll({ type: 'window' }).then(clients => {
+        clients.forEach(c => c.postMessage('FORCE_RELOAD'));
+      });
+    })
   );
 });
 
-// 请求策略：
-// - 导航请求 (HTML)：网络优先，失败回退缓存（保证离线可打开）
-// - 静态资源：缓存优先，回退网络
+// 请求策略
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
-  // 只处理同源请求
   if (url.origin !== location.origin) return;
 
-  // 导航请求
+  // 导航请求：网络优先，总是拿最新的 HTML
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req)
@@ -53,21 +55,18 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // 静态资源
+  // 静态资源：网络优先，回退缓存
   e.respondWith(
-    caches.match(req).then(cached => {
-      return cached || fetch(req).then(res => {
-        if (res && res.status === 200) {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(req, copy));
-        }
-        return res;
-      }).catch(() => cached);
-    })
+    fetch(req).then(res => {
+      if (res && res.status === 200) {
+        const copy = res.clone();
+        caches.open(CACHE_NAME).then(c => c.put(req, copy));
+      }
+      return res;
+    }).catch(() => caches.match(req))
   );
 });
 
-// 接收消息：手动更新
 self.addEventListener('message', e => {
   if (e.data === 'SKIP_WAITING') self.skipWaiting();
 });
