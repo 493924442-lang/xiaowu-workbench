@@ -1127,7 +1127,6 @@ function renderCalendar() {
   document.getElementById('calLunar').textContent = getLunarDate(d);
 }
 function getLunarDate(date) {
-  // 农历数据表（1900-2100年）
   const lunarInfo = [
     0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,
     0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,
@@ -1156,9 +1155,11 @@ function getLunarDate(date) {
   const lunarDay2 = ['一','二','三','四','五','六','七','八','九','十'];
 
   function lYearDays(y) {
-    let sum = 348;
-    for (let i = 0x8000; i > 0x8; i >>= 1) sum += (lunarInfo[y-1900] & i) ? 1 : 0;
-    return sum + leapDays(y);
+    let days = 0;
+    const info = lunarInfo[y - 1900];
+    for (let i = 1; i <= 12; i++) days += (info & (0x10000 >> i)) ? 30 : 29;
+    days += leapDays(y);
+    return days;
   }
   function leapMonth(y) { return lunarInfo[y-1900] & 0xf; }
   function leapDays(y) {
@@ -1167,28 +1168,27 @@ function getLunarDate(date) {
   }
   function monthDays(y, m) { return (lunarInfo[y-1900] & (0x10000 >> m)) ? 30 : 29; }
 
-  let offset = (date - new Date(1900, 0, 31)) / 86400000;
-  offset = Math.floor(offset);
-  let i, temp = 0, year = 1900;
-  for (i = 1900; i < 2101 && offset > 0; i++) {
-    temp = lYearDays(i);
-    offset -= temp;
+  let offset = Math.floor((date - new Date(1900, 0, 31)) / 86400000);
+  let year = 1900;
+  while (year < 2100) {
+    const yd = lYearDays(year);
+    if (offset < yd) break;
+    offset -= yd;
     year++;
   }
-  if (offset < 0) { offset += temp; year--; }
   const leap = leapMonth(year);
   let isLeap = false, month = 1;
-  for (i = 1; i < 13 && offset > 0; i++) {
-    if (leap > 0 && i === (leap + 1) && !isLeap) { --i; isLeap = true; temp = leapDays(year); }
-    else { temp = monthDays(year, i); }
-    if (isLeap && i === (leap + 1)) isLeap = false;
-    offset -= temp;
-    if (!isLeap) month++;
+  for (let m = 1; m <= 12; m++) {
+    if (m === leap + 1 && leap > 0 && !isLeap) {
+      const ld = leapDays(year);
+      if (offset < ld) { isLeap = true; month = m - 1; break; }
+      offset -= ld;
+    }
+    const md = monthDays(year, m);
+    if (offset < md) { month = m; break; }
+    offset -= md;
+    month = m;
   }
-  if (offset === 0 && leap > 0 && i === leap + 1) {
-    if (isLeap) { isLeap = false; } else { isLeap = true; --i; }
-  }
-  if (offset < 0) { offset += temp; --month; }
   const day = offset + 1;
   const mStr = (isLeap ? '闰' : '') + lunarMonth[month - 1] + '月';
   let dStr;
