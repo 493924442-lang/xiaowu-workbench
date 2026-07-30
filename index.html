@@ -211,28 +211,25 @@
   .en-meaning { font-size: 13px; color: #3b82f6; margin-top: 6px;}
   .en-example { font-size: 12px; color: #666; margin-top: 6px; line-height: 1.5; font-style: italic;}
 
-  /* 底部输入栏 */
-  .bottom-input {
-    height: 50px; padding: 0 14px;
-    background: rgba(255,255,255,0.85); backdrop-filter: blur(8px);
-    display: flex; align-items: center; gap: 10px;
-    border-top: 1px solid rgba(0,0,0,0.05);
-  }
-  .bottom-input input {
-    flex: 1; height: 34px; border-radius: 17px; border: none; background: #fff;
-    padding: 0 14px; font-size: 13px; outline: none; box-shadow: inset 0 0 0 1px #eee;
-  }
-  .bottom-input .icon-btn {
-    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
-    justify-content: center; background: transparent; font-size: 18px; color: #555; cursor: pointer;
-  }
+  /* 底部输入栏已移除 */
 
-  .corner-action {
-    position: fixed; right: 18px; bottom: 70px; width: 46px; height: 46px; border-radius: 50%;
-    background: linear-gradient(135deg, #ee5a52, #ff7b6b); color: #fff; font-size: 28px; font-weight: 300;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 14px rgba(238,90,82,0.4); cursor: pointer; z-index: 6;
+  /* 小雏菊背景装饰 */
+  .daisy-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
   }
+  .daisy {
+    position: absolute;
+    width: 32px; height: 32px;
+    opacity: 0.18;
+    animation: daisy-sway 6s ease-in-out infinite;
+  }
+  .daisy svg { width: 100%; height: 100%; }
+  @keyframes daisy-sway {
+    0%, 100% { transform: rotate(-8deg); }
+    50% { transform: rotate(8deg); }
+  }
+  .app, .top-header, .main, .sidebar, .content { position: relative; z-index: 1; }
 
   ::-webkit-scrollbar { width: 4px; height: 4px;}
   ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px;}
@@ -275,7 +272,6 @@
   .save-tip.show { transform: translateX(-50%) translateY(0); }
 
   @supports (padding: max(0px)) {
-    .bottom-input { padding-bottom: env(safe-area-inset-bottom); }
     .top-header { padding-top: env(safe-area-inset-top); }
   }
 </style>
@@ -315,7 +311,10 @@
       <div class="panel active" id="panel-daily">
         <div class="panel-header">
           <div class="panel-title">📋 每日工作 <span class="badge" id="todayBadge">今日</span></div>
-          <button class="sync-btn" onclick="exportData()">📤 导出</button>
+          <div style="display:flex;gap:6px;">
+            <button class="sync-btn" style="background:#fff;color:#ff7eb3;border:1px solid #ffc0cb;" onclick="exportData()">📤</button>
+            <button class="sync-btn" style="background:#fff;color:#ff7eb3;border:1px solid #ffc0cb;" onclick="importData()">📥</button>
+          </div>
         </div>
         <div class="panel-tip">点击任务可编辑，打勾记录完成进度</div>
 
@@ -443,16 +442,10 @@
 
     </div>
   </div>
-
-  <div class="bottom-input">
-    <input type="text" placeholder="在备忘录快速记一笔…" id="quickInput" onkeypress="if(event.key==='Enter')quickAdd()">
-    <div class="icon-btn" onclick="quickAdd()">➕</div>
-    <div class="icon-btn" onclick="exportData()">📤</div>
-    <div class="icon-btn" onclick="importData()">📥</div>
-  </div>
 </div>
 
-<div class="corner-action" onclick="goTo('memo')">+</div>
+<!-- 小雏菊背景装饰 -->
+<div class="daisy-bg" id="daisyBg"></div>
 
 <script>
 // ============ 数据存储层 ============
@@ -767,16 +760,6 @@ function editWord(id, field, val) {
   w[field] = val; DB.set('words',words); showSave();
 }
 
-// ============ 快速添加 ============
-function quickAdd() {
-  const input = document.getElementById('quickInput');
-  const text = input.value.trim(); if(!text) return;
-  const notes = DB.get('notes',[]);
-  notes.unshift({id:nextId(notes), content:text, time:getTimeStr()});
-  DB.set('notes',notes); input.value=''; renderNotes(); showSave();
-  goTo('memo');
-}
-
 // ============ 导入导出 ============
 function exportData() {
   const data = {
@@ -842,6 +825,47 @@ document.querySelectorAll('.en-tab').forEach(tab => {
 
 // 首次渲染
 renderAll();
+
+// ============ 小雏菊背景装饰 ============
+function createDaisies() {
+  const bg = document.getElementById('daisyBg');
+  if (!bg) return;
+  // 小雏菊 SVG（白色花瓣 + 黄色花心）
+  const daisySVG = `<svg viewBox="0 0 40 40">
+    <g transform="translate(20,20)">
+      <ellipse cx="0" cy="-12" rx="4" ry="8" fill="#fff" stroke="#ffd0e0" stroke-width="0.5"/>
+      <ellipse cx="0" cy="12" rx="4" ry="8" fill="#fff" stroke="#ffd0e0" stroke-width="0.5"/>
+      <ellipse cx="-12" cy="0" rx="8" ry="4" fill="#fff" stroke="#ffd0e0" stroke-width="0.5"/>
+      <ellipse cx="12" cy="0" rx="8" ry="4" fill="#fff" stroke="#ffd0e0" stroke-width="0.5"/>
+      <ellipse cx="-8.5" cy="-8.5" rx="6" ry="3.5" fill="#fff" stroke="#ffd0e0" stroke-width="0.5" transform="rotate(-45)"/>
+      <ellipse cx="8.5" cy="-8.5" rx="6" ry="3.5" fill="#fff" stroke="#ffd0e0" stroke-width="0.5" transform="rotate(45)"/>
+      <ellipse cx="-8.5" cy="8.5" rx="6" ry="3.5" fill="#fff" stroke="#ffd0e0" stroke-width="0.5" transform="rotate(45)"/>
+      <ellipse cx="8.5" cy="8.5" rx="6" ry="3.5" fill="#fff" stroke="#ffd0e0" stroke-width="0.5" transform="rotate(-45)"/>
+      <circle cx="0" cy="0" r="5" fill="#ffd84d"/>
+      <circle cx="-1.5" cy="-1.5" r="1" fill="#ffb800" opacity="0.5"/>
+    </g>
+  </svg>`;
+  // 随机散布 18 朵小雏菊
+  const positions = [
+    [5,12],[15,8],[8,25],[20,18],[3,40],[12,35],[18,45],[25,30],
+    [30,10],[35,22],[28,38],[40,15],[45,28],[50,8],[42,42],[48,35],
+    [55,20],[52,45]
+  ];
+  positions.forEach((pos, i) => {
+    const d = document.createElement('div');
+    d.className = 'daisy';
+    d.style.left = pos[0] + '%';
+    d.style.top = pos[1] + '%';
+    d.style.width = (24 + Math.random()*20) + 'px';
+    d.style.height = d.style.width;
+    d.style.animationDelay = (Math.random()*4) + 's';
+    d.style.animationDuration = (5 + Math.random()*4) + 's';
+    d.style.opacity = (0.12 + Math.random()*0.1).toFixed(2);
+    d.innerHTML = daisySVG;
+    bg.appendChild(d);
+  });
+}
+createDaisies();
 
 // ============ PWA 逻辑 ============
 function updateOnline() {
