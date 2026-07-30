@@ -62,7 +62,8 @@
 
   /* 左侧栏 */
   .sidebar {
-    width: 168px; background: rgba(255,255,255,0.96); backdrop-filter: blur(10px);
+    flex: 0 0 30%; max-width: 180px; min-width: 120px;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(10px);
     border-radius: 18px; margin: 8px 6px 8px 12px; padding: 14px 10px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     display: flex; flex-direction: column; gap: 6px; z-index: 4; overflow-y: auto;
@@ -80,7 +81,7 @@
 
   /* 右侧内容区 */
   .content {
-    flex: 1; margin: 8px 12px 8px 6px;
+    flex: 0 0 70%; margin: 8px 12px 8px 6px;
     background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
     border-radius: 18px; padding: 14px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.06); overflow-y: auto; position: relative;
@@ -155,8 +156,10 @@
   .idea-card .tag { display: inline-block; font-size: 10px; background: rgba(245,181,0,0.15); color: #b87600; padding: 1px 6px; border-radius: 4px; margin-right: 4px; }
 
   /* 热点视频 */
-  .hot-item { display: flex; gap: 10px; background: #fff; padding: 10px; border-radius: 12px; border: 1px solid #f0f0f0; margin-bottom: 8px; }
-  .hot-thumb { width: 70px; height: 70px; border-radius: 8px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+  .hot-item { display: flex; gap: 10px; background: #fff; padding: 10px; border-radius: 12px; border: 1px solid #f0f0f0; margin-bottom: 8px; cursor: pointer; transition: all .2s; text-decoration: none; color: inherit; }
+  .hot-item:active { transform: scale(0.98); border-color: #ff7eb3; box-shadow: 0 2px 8px rgba(255,126,179,0.2); }
+  .hot-item .play-icon { position: absolute; top: 50%; left: 35px; transform: translate(-50%,-50%); width: 28px; height: 28px; border-radius: 50%; background: rgba(0,0,0,0.5); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .hot-thumb { position: relative; width: 70px; height: 70px; border-radius: 8px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
   .hot-thumb.b2 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
   .hot-thumb.b3 { background: linear-gradient(135deg, #fa709a, #fee140); }
   .hot-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
@@ -235,8 +238,8 @@
   ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px;}
 
   @media (max-width: 380px) {
-    .sidebar { width: 140px; }
-    .menu-item { font-size: 13px; padding: 9px 10px;}
+    .sidebar { min-width: 100px; }
+    .menu-item { font-size: 12px; padding: 8px 8px;}
   }
 
   /* PWA 安装提示 & 离线提示 */
@@ -354,35 +357,35 @@
           <div class="panel-title">🔥 爆款热点视频 / 二创 <span class="badge">参考</span></div>
           <button class="sync-btn" onclick="addHot()">📥 收藏</button>
         </div>
-        <div class="panel-tip">全网热门参考 · 可记录你的二创笔记</div>
-        <div class="hot-item">
-          <div class="hot-thumb">🎬</div>
+        <div class="panel-tip">点击视频卡片直接跳转观看 · 可记录二创笔记</div>
+        <a class="hot-item" href="https://www.douyin.com/search/我每天要做的事情的计划%20AI工作台" target="_blank" rel="noopener">
+          <div class="hot-thumb">🎬<div class="play-icon">▶</div></div>
           <div class="hot-info">
             <div class="hot-title">"我每天要做的事情的计划" · 跟着AI搭工作台</div>
-            <div class="hot-meta"><span class="hot">🔥 23.0w 赞</span><span>3034 评论</span><span>11.8w 收藏</span></div>
+            <div class="hot-meta"><span class="hot">🔥 23.0w 赞</span><span>3034 评论</span><span>11.8w 收藏</span><span style="color:#ff7eb3;">▶ 点击观看</span></div>
           </div>
-        </div>
-        <div class="hot-item">
-          <div class="hot-thumb b2">📱</div>
+        </a>
+        <a class="hot-item" href="https://www.bilibili.com/search?keyword=AI工具让普通人也能做老板" target="_blank" rel="noopener">
+          <div class="hot-thumb b2">📱<div class="play-icon">▶</div></div>
           <div class="hot-info">
             <div class="hot-title">AI 工具让普通人也能做老板？这3个必学</div>
-            <div class="hot-meta"><span class="hot">🔥 18.6w 赞</span><span>2840 评论</span><span>9.2w 收藏</span></div>
+            <div class="hot-meta"><span class="hot">🔥 18.6w 赞</span><span>2840 评论</span><span>9.2w 收藏</span><span style="color:#ff7eb3;">▶ 点击观看</span></div>
           </div>
-        </div>
-        <div class="hot-item">
-          <div class="hot-thumb b3">🚀</div>
+        </a>
+        <a class="hot-item" href="https://www.douyin.com/search/一天搭出你的AI工作台" target="_blank" rel="noopener">
+          <div class="hot-thumb b3">🚀<div class="play-icon">▶</div></div>
           <div class="hot-info">
             <div class="hot-title">社会榜TOP11 · 一天搭出你的AI工作台</div>
-            <div class="hot-meta"><span class="hot">🔥 12.4w 赞</span><span>1620 评论</span><span>6.4w 收藏</span></div>
+            <div class="hot-meta"><span class="hot">🔥 12.4w 赞</span><span>1620 评论</span><span>6.4w 收藏</span><span style="color:#ff7eb3;">▶ 点击观看</span></div>
           </div>
-        </div>
-        <div class="hot-item">
-          <div class="hot-thumb">✨</div>
+        </a>
+        <a class="hot-item" href="https://www.xiaohongshu.com/search_result?keyword=AI时代打工人如何不被淘汰" target="_blank" rel="noopener">
+          <div class="hot-thumb">✨<div class="play-icon">▶</div></div>
           <div class="hot-info">
             <div class="hot-title">AI 时代来临，打工人如何不被淘汰？</div>
-            <div class="hot-meta"><span class="hot">🔥 9.8w 赞</span><span>1102 评论</span><span>5.1w 收藏</span></div>
+            <div class="hot-meta"><span class="hot">🔥 9.8w 赞</span><span>1102 评论</span><span>5.1w 收藏</span><span style="color:#ff7eb3;">▶ 点击观看</span></div>
           </div>
-        </div>
+        </a>
         <div id="hotNotes"></div>
       </div>
 
@@ -600,12 +603,16 @@ function editIdea(id, field, val) {
 function renderHotNotes() {
   const notes = DB.get('hotNotes', []);
   const el = document.getElementById('hotNotes');
-  el.innerHTML = '<div style="font-size:12px;color:#999;margin:10px 0 6px;">📌 我的二创笔记</div>';
+  el.innerHTML = '<div style="font-size:12px;color:#999;margin:10px 0 6px;">📌 我的二创笔记（可粘贴视频链接）</div>';
   notes.forEach(n => {
     const d = document.createElement('div');
     d.className = 'note-item';
+    // 检测内容中是否包含链接
+    const content = esc(n.content);
+    const linked = content.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:#ff7eb3;text-decoration:underline;">$1</a>');
     d.innerHTML = `
-      <div contenteditable="true" onblur="editHot(${n.id},this.textContent)" style="white-space:pre-wrap;">${esc(n.content)}</div>
+      <div contenteditable="true" onblur="editHot(${n.id},this.textContent)" style="white-space:pre-wrap;">${content}</div>
+      ${n.content.match(/https?:\/\//) ? `<div style="margin-top:4px;">${linked}</div>` : ''}
       <div class="note-time">${n.time}</div>
       <span class="del-btn" onclick="delHot(${n.id})">✕</span>
     `;
@@ -614,7 +621,7 @@ function renderHotNotes() {
 }
 function addHot() {
   const notes = DB.get('hotNotes',[]);
-  notes.unshift({id:nextId(notes), content:'记录二创思路…', time:getTimeStr()});
+  notes.unshift({id:nextId(notes), content:'粘贴视频链接或记录二创思路…', time:getTimeStr()});
   DB.set('hotNotes',notes); renderHotNotes(); showSave();
 }
 function delHot(id) {
@@ -624,7 +631,7 @@ function delHot(id) {
 function editHot(id, val) {
   const notes = DB.get('hotNotes',[]);
   const n = notes.find(x=>x.id===id); if(!n) return;
-  n.content = val; DB.set('hotNotes',notes); showSave();
+  n.content = val; DB.set('hotNotes',notes); renderHotNotes(); showSave();
 }
 
 // ============ 4. 记账 ============
