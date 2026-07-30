@@ -420,6 +420,137 @@
     .status-bar { padding-top: env(safe-area-inset-top); height: calc(44px + env(safe-area-inset-top)); }
     .app { margin-top: calc(44px + env(safe-area-inset-top)); height: calc(100% - 44px - env(safe-area-inset-top)); }
   }
+
+  /* ============ 可编辑输入区 ============ */
+  .editable {
+    background: #fff;
+    border: 1.5px dashed #ffc0cb;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #2b2b2b;
+    outline: none;
+    transition: border-color .2s, background .2s;
+    min-height: 36px;
+    line-height: 1.5;
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+  .editable:focus, .editable:active {
+    border-color: #ff7eb3;
+    border-style: solid;
+    background: #fffafc;
+    box-shadow: 0 0 0 3px rgba(255,126,179,0.12);
+  }
+  .editable:empty::before {
+    content: attr(data-placeholder);
+    color: #ccc;
+    font-size: 12px;
+  }
+
+  /* 可编辑任务文本 */
+  .task .task-text.editable {
+    border: none;
+    border-bottom: 1px dashed transparent;
+    border-radius: 4px;
+    padding: 2px 4px;
+    min-height: 0;
+    background: transparent;
+  }
+  .task .task-text.editable:focus {
+    border-bottom-color: #ff7eb3;
+    background: #fffafc;
+    box-shadow: none;
+  }
+
+  /* 可编辑记账输入 */
+  .acc-card .editable-num {
+    font-size: 16px;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed #ffc0cb;
+    border-radius: 0;
+    padding: 0;
+    min-height: 0;
+    width: 100%;
+    text-align: center;
+    outline: none;
+  }
+  .acc-card .editable-num:focus {
+    border-bottom-color: #ff7eb3;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .record-item .editable {
+    border: none;
+    border-bottom: 1px dashed transparent;
+    border-radius: 4px;
+    padding: 2px 6px;
+    min-height: 0;
+    background: transparent;
+    flex: 0 0 auto;
+    max-width: 60%;
+  }
+  .record-item .editable:focus {
+    border-bottom-color: #ff7eb3;
+    background: #fffafc;
+    box-shadow: none;
+  }
+  .record-item .amount.editable {
+    font-weight: 700;
+    text-align: right;
+  }
+
+  /* 灵感/备忘录可编辑 */
+  .idea-card .editable, .note-item .editable {
+    border: none;
+    background: transparent;
+    padding: 2px 0;
+    min-height: 0;
+  }
+  .idea-card .editable:focus, .note-item .editable:focus {
+    background: rgba(255,255,255,0.5);
+    border-radius: 4px;
+    box-shadow: none;
+  }
+
+  /* 英语输入区 */
+  .en-input-area {
+    background: #fff;
+    border: 1.5px dashed #ffc0cb;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+  .en-input-area .label {
+    font-size: 11px;
+    color: #999;
+    margin-bottom: 6px;
+  }
+  .en-input-area .editable {
+    border-color: #ffe0e8;
+    margin-bottom: 8px;
+  }
+  .en-input-area .editable:last-child { margin-bottom: 0; }
+
+  /* 保存提示 */
+  .save-tip {
+    position: fixed;
+    bottom: 90px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: rgba(255,126,179,0.95);
+    color: #fff;
+    font-size: 12px;
+    padding: 7px 16px;
+    border-radius: 20px;
+    z-index: 998;
+    transition: transform .3s ease;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(255,126,179,0.4);
+  }
+  .save-tip.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -501,27 +632,27 @@
         <div class="task-list">
           <div class="task done">
             <div class="check">✓</div>
-            <div class="task-text">晨间选题会（30min）</div>
+            <div class="task-text editable" contenteditable="true" data-key="task-1" data-placeholder="输入任务…">晨间选题会（30min）</div>
             <span class="task-tag">已完成</span>
           </div>
           <div class="task done">
             <div class="check">✓</div>
-            <div class="task-text">短视频脚本撰写 ×2</div>
+            <div class="task-text editable" contenteditable="true" data-key="task-2" data-placeholder="输入任务…">短视频脚本撰写 ×2</div>
             <span class="task-tag">已完成</span>
           </div>
           <div class="task done">
             <div class="check">✓</div>
-            <div class="task-text">回复评论区高赞留言</div>
+            <div class="task-text editable" contenteditable="true" data-key="task-3" data-placeholder="输入任务…">回复评论区高赞留言</div>
             <span class="task-tag">已完成</span>
           </div>
           <div class="task">
             <div class="check"></div>
-            <div class="task-text">剪辑爆款二创视频</div>
+            <div class="task-text editable" contenteditable="true" data-key="task-4" data-placeholder="输入任务…">剪辑爆款二创视频</div>
             <span class="task-tag urgent">紧急</span>
           </div>
           <div class="task">
             <div class="check"></div>
-            <div class="task-text">整理今日记账数据</div>
+            <div class="task-text editable" contenteditable="true" data-key="task-5" data-placeholder="输入任务…">整理今日记账数据</div>
             <span class="task-tag normal">普通</span>
           </div>
         </div>
@@ -560,6 +691,11 @@
           <div class="idea-title">#美食探店</div>
           <div class="tag">探店</div>
           <p style="margin-top:6px;">藏在巷子里的 15年老店，老板一句话让人破防……</p>
+        </div>
+
+        <div class="en-input-area" style="border-color:#ffe0a0;">
+          <div class="label">💡 我的灵感记录</div>
+          <div class="editable" contenteditable="true" data-key="my-idea" data-placeholder="闪现的灵感、选题、金句…随时记下来" style="min-height:60px;"></div>
         </div>
       </div>
 
@@ -611,61 +747,61 @@
         <div class="account-summary">
           <div class="acc-card income">
             <p>今日收入</p>
-            <h4>+¥1,280</h4>
+            <h4 class="editable-num" contenteditable="true" data-key="acc-income" data-placeholder="0">+¥1,280</h4>
           </div>
           <div class="acc-card expense">
             <p>今日支出</p>
-            <h4>-¥328</h4>
+            <h4 class="editable-num" contenteditable="true" data-key="acc-expense" data-placeholder="0">-¥328</h4>
           </div>
           <div class="acc-card pending-out">
             <p>未付款</p>
-            <h4>¥450</h4>
+            <h4 class="editable-num" contenteditable="true" data-key="acc-pending-out" data-placeholder="0">¥450</h4>
           </div>
           <div class="acc-card pending-in">
             <p>未收款</p>
-            <h4>¥800</h4>
+            <h4 class="editable-num" contenteditable="true" data-key="acc-pending-in" data-placeholder="0">¥800</h4>
           </div>
         </div>
 
         <div class="record-item">
           <div class="l"><span class="cat-dot" style="background:#ee5a52"></span>广告合作收入</div>
-          <span class="amount in">+¥1,200</span>
+          <span class="amount in editable" contenteditable="true" data-key="rec-1" data-placeholder="0">+¥1,200</span>
         </div>
         <div class="record-item">
           <div class="l"><span class="cat-dot" style="background:#3b82f6"></span>午餐 · 牛肉面</div>
-          <span class="amount out">-¥28</span>
+          <span class="amount out editable" contenteditable="true" data-key="rec-2" data-placeholder="0">-¥28</span>
         </div>
         <div class="record-item">
           <div class="l"><span class="cat-dot" style="background:#f5b500"></span>打车报销</div>
-          <span class="amount in">+¥80</span>
+          <span class="amount in editable" contenteditable="true" data-key="rec-3" data-placeholder="0">+¥80</span>
         </div>
         <div class="record-item">
           <div class="l"><span class="cat-dot" style="background:#ff7eb3"></span>咖啡</div>
-          <span class="amount out">-¥35</span>
+          <span class="amount out editable" contenteditable="true" data-key="rec-4" data-placeholder="0">-¥35</span>
         </div>
         <div class="record-item">
           <div class="l"><span class="cat-dot" style="background:#a855f7"></span>剪辑软件订阅</div>
-          <span class="amount out">-¥99</span>
+          <span class="amount out editable" contenteditable="true" data-key="rec-5" data-placeholder="0">-¥99</span>
         </div>
         <div class="record-item">
           <div class="l"><span class="cat-dot" style="background:#ff6b6b"></span>晚餐 · 轻食</div>
-          <span class="amount out">-¥48</span>
+          <span class="amount out editable" contenteditable="true" data-key="rec-6" data-placeholder="0">-¥48</span>
         </div>
         <div class="record-item">
           <div class="l"><span class="cat-dot" style="background:#10b981"></span>直播间打赏</div>
-          <span class="amount out">-¥118</span>
+          <span class="amount out editable" contenteditable="true" data-key="rec-7" data-placeholder="0">-¥118</span>
         </div>
         <div class="record-item">
           <div class="l"><span class="cat-dot" style="background:#f5b500"></span>待付 · 场地租赁费</div>
-          <span class="amount out" style="color:#f5b500;">待付 ¥300</span>
+          <span class="amount out editable" contenteditable="true" data-key="rec-8" data-placeholder="0" style="color:#f5b500;">待付 ¥300</span>
         </div>
         <div class="record-item">
           <div class="l"><span class="cat-dot" style="background:#f5b500"></span>待付 · 合作分成</div>
-          <span class="amount out" style="color:#f5b500;">待付 ¥150</span>
+          <span class="amount out editable" contenteditable="true" data-key="rec-9" data-placeholder="0" style="color:#f5b500;">待付 ¥150</span>
         </div>
         <div class="record-item">
           <div class="l"><span class="cat-dot" style="background:#a855f7"></span>待收 · 品牌方尾款</div>
-          <span class="amount in" style="color:#a855f7;">待收 ¥800</span>
+          <span class="amount in editable" contenteditable="true" data-key="rec-10" data-placeholder="0" style="color:#a855f7;">待收 ¥800</span>
         </div>
       </div>
 
@@ -679,27 +815,19 @@
 
         <div class="note-item">
           <div class="pin">📌</div>
-          <b>下周选题方向：</b><br>
-          ① AI 工具 vs 普通人的故事<br>
-          ② 一人公司真实日常<br>
-          ③ 副业 0 → 1 复盘
+          <div class="editable" contenteditable="true" data-key="note-1" data-placeholder="写点什么…"><b>下周选题方向：</b><br>① AI 工具 vs 普通人的故事<br>② 一人公司真实日常<br>③ 副业 0 → 1 复盘</div>
           <div class="note-time">2026-07-21 09:12</div>
         </div>
         <div class="note-item">
-          <b>金句收集：</b><br>
-          "行动力，是这个时代最稀缺的才华。"
+          <div class="editable" contenteditable="true" data-key="note-2" data-placeholder="写点什么…"><b>金句收集：</b><br>"行动力，是这个时代最稀缺的才华。"</div>
           <div class="note-time">2026-07-20 22:48</div>
         </div>
         <div class="note-item">
-          <b>待办（重要）：</b><br>
-          • 联系老张谈合作分成<br>
-          • 把爆款二创视频发B站<br>
-          • 给妈妈打电话
+          <div class="editable" contenteditable="true" data-key="note-3" data-placeholder="写点什么…"><b>待办（重要）：</b><br>• 联系老张谈合作分成<br>• 把爆款二创视频发B站<br>• 给妈妈打电话</div>
           <div class="note-time">2026-07-20 18:30</div>
         </div>
         <div class="note-item">
-          <b>灵感碎片：</b><br>
-          凌晨3点的便利店，最能看清一座城市的底色……
+          <div class="editable" contenteditable="true" data-key="note-4" data-placeholder="写点什么…"><b>灵感碎片：</b><br>凌晨3点的便利店，最能看清一座城市的底色……</div>
           <div class="note-time">2026-07-19 03:14</div>
         </div>
       </div>
@@ -735,6 +863,12 @@
           <div class="en-phonetic">/ˈmaɪndset/</div>
           <div class="en-meaning">n. 思维模式，心态</div>
           <div class="en-example">"A growth mindset changes everything."<br>成长型思维改变一切。</div>
+        </div>
+
+        <div class="en-input-area">
+          <div class="label">✍️ 我的练习（输入单词或造句）</div>
+          <div class="editable" contenteditable="true" data-key="en-word" data-placeholder="输入今天学到的单词…"></div>
+          <div class="editable" contenteditable="true" data-key="en-sentence" data-placeholder="用这个单词造个句子…"></div>
         </div>
       </div>
 
@@ -818,7 +952,55 @@
     });
   });
 
-  // ============ PWA 逻辑 ============
+  // ============ 可编辑内容本地存储 ============
+  const STORAGE_PREFIX = 'xw_wb_';
+
+  // 恢复所有可编辑区域的内容
+  function restoreEditable() {
+    document.querySelectorAll('.editable[contenteditable="true"]').forEach(el => {
+      const key = el.dataset.key;
+      if (!key) return;
+      const saved = localStorage.getItem(STORAGE_PREFIX + key);
+      if (saved !== null && saved !== '') {
+        el.innerHTML = saved;
+      }
+    });
+  }
+
+  // 保存提示元素
+  let saveTimer = null;
+  function showSaveTip() {
+    let tip = document.getElementById('saveTip');
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.className = 'save-tip';
+      tip.id = 'saveTip';
+      tip.textContent = '✓ 已保存';
+      document.body.appendChild(tip);
+    }
+    tip.classList.add('show');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => tip.classList.remove('show'), 1200);
+  }
+
+  // 监听所有可编辑区域的输入事件
+  document.querySelectorAll('.editable[contenteditable="true"]').forEach(el => {
+    el.addEventListener('input', () => {
+      const key = el.dataset.key;
+      if (!key) return;
+      localStorage.setItem(STORAGE_PREFIX + key, el.innerHTML);
+      showSaveTip();
+    });
+    // 阻止粘贴富文本（只粘贴纯文本）
+    el.addEventListener('paste', e => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+      document.execCommand('insertText', false, text);
+    });
+  });
+
+  // 页面加载时恢复
+  restoreEditable();
   // 离线/在线 监听
   function updateOnline() {
     const banner = document.getElementById('offlineBanner');
