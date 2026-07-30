@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#ff7eb3">
-<meta name="description" content="小吴的私人创作工作台：每日工作、灵感、热点二创、记账、备忘录、英语练习，六合一。">
+<meta name="description" content="小吴的私人创作工作台：每日工作、AI视频制作学习、热点二创、记账、备忘录、英语练习，六合一。">
 
 <!-- PWA -->
 <link rel="manifest" href="./manifest.json">
@@ -297,7 +297,7 @@
     <!-- 左侧菜单 -->
     <div class="sidebar">
       <div class="menu-item active" data-target="daily"><span class="icon">📋</span><span>每日工作</span></div>
-      <div class="menu-item" data-target="inspire"><span class="icon">💡</span><span>全体每日灵感</span></div>
+      <div class="menu-item" data-target="inspire"><span class="icon">🎬</span><span>AI视频制作学习</span></div>
       <div class="menu-item" data-target="hotvideo"><span class="icon">🔥</span><span>爆款热点视频2创</span></div>
       <div class="menu-item" data-target="account"><span class="icon">📊</span><span>每日记账</span></div>
       <div class="menu-item" data-target="memo"><span class="icon">📝</span><span>备忘录</span></div>
@@ -340,13 +340,56 @@
         </div>
       </div>
 
-      <!-- 2. 灵感 -->
+      <!-- 2. AI视频制作学习 -->
       <div class="panel" id="panel-inspire">
         <div class="panel-header">
-          <div class="panel-title">💡 全体每日灵感</div>
-          <button class="sync-btn" onclick="addIdea()">✨ 记灵感</button>
+          <div class="panel-title">🎬 AI视频制作学习</div>
+          <button class="sync-btn" onclick="addLearnNote()">📝 记笔记</button>
         </div>
-        <div class="panel-tip">AI + 团队共创 · 点击可编辑你的灵感</div>
+        <div class="panel-tip">点击视频卡片直接跳转学习 · 收藏你的学习笔记</div>
+
+        <a class="hot-item" href="https://www.bilibili.com/search?keyword=AI视频制作入门教程" target="_blank" rel="noopener">
+          <div class="hot-thumb">🎥<div class="play-icon">▶</div></div>
+          <div class="hot-info">
+            <div class="hot-title">AI视频制作入门教程 · 零基础到上手</div>
+            <div class="hot-meta"><span class="hot">📚 B站</span><span>从0开始学</span><span style="color:#ff7eb3;">▶ 点击学习</span></div>
+          </div>
+        </a>
+        <a class="hot-item" href="https://www.bilibili.com/search?keyword=Sora AI生成视频教程" target="_blank" rel="noopener">
+          <div class="hot-thumb b2">🤖<div class="play-icon">▶</div></div>
+          <div class="hot-info">
+            <div class="hot-title">Sora AI 生成视频 · 完整实操指南</div>
+            <div class="hot-meta"><span class="hot">📚 B站</span><span>实战演示</span><span style="color:#ff7eb3;">▶ 点击学习</span></div>
+          </div>
+        </a>
+        <a class="hot-item" href="https://www.douyin.com/search/剪映AI视频制作教程" target="_blank" rel="noopener">
+          <div class="hot-thumb b3">✂️<div class="play-icon">▶</div></div>
+          <div class="hot-info">
+            <div class="hot-title">剪映 AI 功能全解析 · 一键生成爆款视频</div>
+            <div class="hot-meta"><span class="hot">📱 抖音</span><span>手机就能做</span><span style="color:#ff7eb3;">▶ 点击学习</span></div>
+          </div>
+        </a>
+        <a class="hot-item" href="https://www.bilibili.com/search?keyword=Runway AI视频生成教程" target="_blank" rel="noopener">
+          <div class="hot-thumb">🚀<div class="play-icon">▶</div></div>
+          <div class="hot-info">
+            <div class="hot-title">Runway AI 视频生成 · 文字变大片</div>
+            <div class="hot-meta"><span class="hot">📚 B站</span><span>进阶教程</span><span style="color:#ff7eb3;">▶ 点击学习</span></div>
+          </div>
+        </a>
+        <a class="hot-item" href="https://www.douyin.com/search=AI数字人视频制作" target="_blank" rel="noopener">
+          <div class="hot-thumb b2">🗣️<div class="play-icon">▶</div></div>
+          <div class="hot-info">
+            <div class="hot-title">AI 数字人口播视频 · 不出镜做内容</div>
+            <div class="hot-meta"><span class="hot">📱 抖音</span><span>热门玩法</span><span style="color:#ff7eb3;">▶ 点击学习</span></div>
+          </div>
+        </a>
+        <a class="hot-item" href="https://www.bilibili.com/search?keyword=AI动画制作教程 AnimateDiff" target="_blank" rel="noopener">
+          <div class="hot-thumb b3">🎨<div class="play-icon">▶</div></div>
+          <div class="hot-info">
+            <div class="hot-title">AI 动画制作 · AnimateDiff 完整教程</div>
+            <div class="hot-meta"><span class="hot">📚 B站</span><span>高阶玩法</span><span style="color:#ff7eb3;">▶ 点击学习</span></div>
+          </div>
+        </a>
         <div id="ideaList"></div>
       </div>
 
@@ -466,9 +509,8 @@ function initData() {
     {id:4, text:'剪辑爆款二创视频', done:false, tag:'normal'},
   ]);
   if (!DB.get('ideas')) DB.set('ideas', [
-    {id:1, title:'#职场成长', tags:['AI工具','效率'], content:'"只会空想，但行动力为0？恭喜你，你的时代来了！" 用反差感切入AI工具主题。'},
-    {id:2, title:'#生活方式', tags:['生活'], content:'下班后 1 小时决定你的人生——3 个微习惯让你悄悄变强。'},
-    {id:3, title:'#情感共鸣', tags:['情感'], content:'成年人的崩溃都是从"我没事"开始的。给陌生人一个微笑，也许就能拯救今天。'},
+    {id:1, title:'Sora 学习要点', content:'1. 提示词要具体描述画面\n2. 镜头运动用关键词控制\n3. 时长建议 5-10秒\n4. 生成后可二次剪辑'},
+    {id:2, title:'剪映AI功能笔记', content:'• AI字幕：一键识别语音\n• AI配音：输入文字生成\n• AI抠像：无需绿幕\n• AI卡点：自动匹配音乐节奏'},
   ]);
   if (!DB.get('records')) DB.set('records', [
     {id:1, desc:'广告合作收入', amount:1200, type:'in'},
@@ -558,28 +600,26 @@ function updateProgress() {
   ring.setAttribute('stroke-dashoffset', 176 - 176*pct/100);
 }
 
-// ============ 2. 灵感 ============
+// ============ 2. AI视频学习笔记 ============
 function renderIdeas() {
   const ideas = DB.get('ideas', []);
   const list = document.getElementById('ideaList');
-  list.innerHTML = '';
+  if (ideas.length) list.innerHTML = '<div style="font-size:12px;color:#999;margin:10px 0 6px;">📝 我的学习笔记</div>';
+  else list.innerHTML = '';
   ideas.forEach(i => {
     const el = document.createElement('div');
     el.className = 'idea-card';
     el.innerHTML = `
       <div class="idea-title" contenteditable="true" onblur="editIdea(${i.id},'title',this.textContent)">${esc(i.title)}</div>
-      <div style="margin:4px 0;">
-        ${i.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}
-      </div>
       <div contenteditable="true" onblur="editIdea(${i.id},'content',this.textContent)" style="margin-top:6px;white-space:pre-wrap;">${esc(i.content)}</div>
       <span class="del-btn" style="float:right;cursor:pointer;color:#ccc;font-size:14px;" onclick="delIdea(${i.id})">✕</span>
     `;
     list.appendChild(el);
   });
 }
-function addIdea() {
+function addLearnNote() {
   const ideas = DB.get('ideas',[]);
-  ideas.push({id:nextId(ideas), title:'#新灵感', tags:['待分类'], content:'点击编辑你的灵感内容…'});
+  ideas.unshift({id:nextId(ideas), title:'新笔记标题', content:'记录学到的知识点、操作步骤或心得…'});
   DB.set('ideas',ideas); renderIdeas(); showSave();
 }
 function delIdea(id) {

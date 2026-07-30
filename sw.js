@@ -1,5 +1,5 @@
 // ===== 小吴工作台 Service Worker =====
-const CACHE_NAME = 'xiaowu-workbench-v7-daisy';
+const CACHE_NAME = 'xiaowu-workbench-v8-ai-video';
 const ASSETS = [
   './',
   './index.html',

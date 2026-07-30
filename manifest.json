@@ -1,7 +1,7 @@
 {
   "name": "小吴的工作台",
   "short_name": "工作台",
-  "description": "小吴的私人创作工作台：每日工作、灵感、热点二创、记账、备忘录、英语练习，六合一。",
+  "description": "小吴的私人创作工作台：每日工作、AI视频制作学习、热点二创、记账、备忘录、英语练习，六合一。",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -19,7 +19,7 @@
   ],
   "shortcuts": [
     { "name": "每日工作", "url": "./index.html#daily", "icons": [{"src":"icons/icon-192.png","sizes":"192x192"}] },
-    { "name": "每日灵感", "url": "./index.html#inspire", "icons": [{"src":"icons/icon-192.png","sizes":"192x192"}] },
+    { "name": "AI视频学习", "url": "./index.html#inspire", "icons": [{"src":"icons/icon-192.png","sizes":"192x192"}] },
     { "name": "每日记账", "url": "./index.html#account", "icons": [{"src":"icons/icon-192.png","sizes":"192x192"}] }
   ]
 }
