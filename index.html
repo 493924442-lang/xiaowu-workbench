@@ -30,23 +30,10 @@
     overflow: hidden;
   }
 
-  /* 顶部状态栏 */
-  .status-bar {
-    height: 44px;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 24px; font-size: 14px; font-weight: 600; color: #111;
-    position: absolute; top: 0; left: 0; right: 0; z-index: 10;
-  }
-  .status-bar .right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
-  .status-bar .notch {
-    position: absolute; left: 50%; transform: translateX(-50%);
-    top: 8px; width: 110px; height: 28px; background: #111; border-radius: 20px;
-  }
-
   /* 顶部标题栏 */
   .top-header {
     height: 60px; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 18px; margin-top: 44px; position: relative; z-index: 5;
+    padding: 0 18px; position: relative; z-index: 5;
   }
   .top-header .title-wrap { display: flex; align-items: center; gap: 10px; }
   .avatar {
@@ -68,7 +55,7 @@
 
   /* 主容器 */
   .app {
-    height: calc(100% - 44px); margin-top: 44px;
+    height: 100%;
     display: flex; flex-direction: column; position: relative;
   }
   .main { flex: 1; display: flex; position: relative; overflow: hidden; }
@@ -286,8 +273,7 @@
 
   @supports (padding: max(0px)) {
     .bottom-input { padding-bottom: env(safe-area-inset-bottom); }
-    .status-bar { padding-top: env(safe-area-inset-top); height: calc(44px + env(safe-area-inset-top)); }
-    .app { margin-top: calc(44px + env(safe-area-inset-top)); height: calc(100% - 44px - env(safe-area-inset-top)); }
+    .top-header { padding-top: env(safe-area-inset-top); }
   }
 </style>
 </head>
@@ -295,13 +281,6 @@
 
 <!-- 离线提示 -->
 <div class="offline-banner" id="offlineBanner">📡 当前离线，正在显示本地缓存内容</div>
-
-<!-- 状态栏 -->
-<div class="status-bar">
-  <div class="left" id="clock">09:57</div>
-  <div class="notch"></div>
-  <div class="right">📶 📡 🔋</div>
-</div>
 
 <div class="app">
   <div class="top-header">
@@ -839,7 +818,6 @@ function renderAll() { renderTasks(); renderIdeas(); renderRecords(); renderNote
 // ============ 初始化 ============
 function tick() {
   const d = new Date();
-  document.getElementById('clock').textContent = String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
   const days = ['日','一','二','三','四','五','六'];
   document.getElementById('dateStr').textContent = `${d.getMonth()+1}月${d.getDate()}日 周${days[d.getDay()]} · 搜索…`;
 }
