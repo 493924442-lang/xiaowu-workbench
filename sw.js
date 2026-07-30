@@ -1,5 +1,5 @@
 // ===== 小吴工作台 Service Worker =====
-const CACHE_NAME = 'xiaowu-workbench-v11-fullscreen-calendar-en';
+const CACHE_NAME = 'xiaowu-workbench-v12-swipe-back-read-checkin';
 const ASSETS = [
   './',
   './index.html',

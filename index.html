@@ -88,15 +88,29 @@
   }
 
   /* 全屏面板模式 */
-  .content.fullscreen-mode { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; margin: 0; border-radius: 0; height: 100%; }
+  .content.fullscreen-mode { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; margin: 0; border-radius: 0; height: 100%; padding-top: env(safe-area-inset-top); }
   .fullscreen-back {
-    display: none; position: fixed; top: 12px; left: 12px; z-index: 101;
-    background: rgba(255,126,179,0.9); color: #fff; border: none;
-    width: 36px; height: 36px; border-radius: 50%; font-size: 18px;
-    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    display: none; position: fixed; bottom: 24px; left: 20px; z-index: 101;
+    background: rgba(255,126,179,0.92); color: #fff; border: none;
+    width: 48px; height: 48px; border-radius: 50%; font-size: 22px;
+    cursor: pointer; box-shadow: 0 4px 14px rgba(255,126,179,0.5);
     align-items: center; justify-content: center;
+    transition: transform .2s ease, box-shadow .2s ease;
+    -webkit-tap-highlight-color: transparent;
   }
+  .fullscreen-back:active { transform: scale(0.88); box-shadow: 0 2px 8px rgba(255,126,179,0.4); }
   .fullscreen-mode .fullscreen-back { display: flex; }
+  /* 全屏右滑返回手势提示 */
+  .swipe-hint {
+    display: none; position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+    z-index: 101; font-size: 11px; color: rgba(255,126,179,0.6);
+    background: rgba(255,255,255,0.8); padding: 4px 12px; border-radius: 12px;
+    pointer-events: none; animation: hint-fade 3s ease forwards;
+  }
+  @keyframes hint-fade {
+    0% { opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; }
+  }
+  .fullscreen-mode .swipe-hint { display: block; }
 
   /* 日历卡片 */
   .calendar-card {
@@ -593,8 +607,13 @@
 <!-- 小雏菊背景装饰 -->
 <div class="daisy-bg" id="daisyBg"></div>
 
-<!-- 全屏返回按钮 -->
-<button class="fullscreen-back" id="fsBack" onclick="closeFullscreen()">‹</button>
+<!-- 全屏返回按钮（左下角） -->
+<button class="fullscreen-back" id="fsBack" onclick="closeFullscreen()">
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12L12 4l9 8"/><path d="M5 11v9h14v-9"/>
+  </svg>
+</button>
+<div class="swipe-hint" id="swipeHint">👉 向右滑动返回主页</div>
 
 <script>
 // ============ 数据存储层 ============
@@ -980,9 +999,11 @@ function renderSpell() {
 }
 function renderRead() {
   const { sentences } = getTodayEnData();
+  const c = getCheckin();
   const list = document.getElementById('readList');
   list.innerHTML = '';
   sentences.forEach((s, i) => {
+    const done = c.sentences.includes(i);
     const el = document.createElement('div');
     el.className = 'en-card';
     el.innerHTML = `
@@ -990,12 +1011,19 @@ function renderRead() {
         <span style="font-size:11px;color:#ccc;margin-top:4px;">${i+1}</span>
         <div style="flex:1;">
           <div style="font-size:15px;line-height:1.6;">${esc(s)}</div>
-          <button class="read-btn" onclick="speak('${esc(s)}')">🔊 跟读</button>
+          <div style="display:flex;gap:6px;margin-top:8px;align-items:center;">
+            <button class="read-btn" onclick="speak('${esc(s)}')">🔊 跟读</button>
+            <button class="read-btn" style="background:${done?'#ff7eb3':'#fff'};color:${done?'#fff':'#ff7eb3'};border:1.5px solid #ff7eb3;" onclick="toggleReadDone(${i})">${done?'✓ 已跟读':'标记已读'}</button>
+          </div>
         </div>
       </div>
     `;
     list.appendChild(el);
   });
+}
+function toggleReadDone(idx) {
+  toggleCheckin('sentences', idx);
+  renderRead();
 }
 function renderCheckin() {
   const c = getCheckin();
@@ -1112,10 +1140,60 @@ function goTo(target) {
 }
 function openFullscreen() {
   document.getElementById('contentBox').classList.add('fullscreen-mode');
+  // 显示滑动提示（仅首次）
+  const hint = document.getElementById('swipeHint');
+  if (hint) { hint.style.animation = 'none'; void hint.offsetWidth; hint.style.animation = 'hint-fade 3s ease forwards'; }
 }
 function closeFullscreen() {
   document.getElementById('contentBox').classList.remove('fullscreen-mode');
 }
+
+// ============ 右滑返回手势 ============
+  let touchStartX = 0, touchStartY = 0, touchStartTime = 0, isSwiping = false;
+  const contentBox = document.getElementById('contentBox');
+
+  contentBox.addEventListener('touchstart', e => {
+    if (!contentBox.classList.contains('fullscreen-mode')) return;
+    // 仅在从左边缘 40px 范围内开始触摸时启用右滑返回
+    const touch = e.touches[0];
+    if (touch.clientX < 40) {
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      touchStartTime = Date.now();
+      isSwiping = true;
+    } else {
+      isSwiping = false;
+    }
+  }, { passive: true });
+
+  contentBox.addEventListener('touchmove', e => {
+    if (!isSwiping) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - touchStartX;
+    const dy = Math.abs(touch.clientY - touchStartY);
+    // 水平滑动距离 > 垂直滑动距离时才视为右滑
+    if (dx > 0 && dx > dy) {
+      // 跟手移动面板
+      contentBox.style.transform = `translateX(${dx * 0.5}px)`;
+      contentBox.style.transition = 'none';
+    }
+  }, { passive: true });
+
+  contentBox.addEventListener('touchend', e => {
+    if (!isSwiping) return;
+    isSwiping = false;
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchStartX;
+    const dt = Date.now() - touchStartTime;
+    contentBox.style.transition = '';
+    contentBox.style.transform = '';
+
+    // 判定：滑动距离 > 80px 或 速度足够快
+    if (dx > 80 || (dx > 40 && dt < 300)) {
+      closeFullscreen();
+    }
+  }, { passive: true });
+})();
 
 // ============ 日历（阳历+农历） ============
 function renderCalendar() {
